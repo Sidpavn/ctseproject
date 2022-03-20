@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "478351843234",
+    "project_id": "ctseproject-e5924",
+    "storage_bucket": "ctseproject-e5924.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478351843234:android:18f691b6766b2b5d049cfb",
+        "android_client_info": {
+          "package_name": "com.example.ctseproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "478351843234-g34frbn250qn8de6oe5lqu0u345ieh3j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOYEV9I9jknf-3tyiOr5reASfBsjBBPBw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "478351843234-g34frbn250qn8de6oe5lqu0u345ieh3j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
