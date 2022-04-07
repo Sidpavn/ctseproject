@@ -108,8 +108,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                 return AlertDialog(
                                   insetPadding: const EdgeInsets.all(10.0),
                                   backgroundColor: Colors.white,
-                                  title: Text(
-                                      'Edit, Remove,\nCheck your Medicine schedule',
+                                  title: Text('We will help you to schedule',
                                       style: GoogleFonts.robotoMono(
                                         textStyle: Theme.of(context)
                                             .textTheme
@@ -129,8 +128,8 @@ class _MedicinePageState extends State<MedicinePage> {
                                           TextSpan(
                                               text:
                                                   'Touch the medicine item to edit its content.'
-                                                  '\n\nYou can remove it from the list too if you want too.'
-                                                  '\n\nPress the red circle on the item, to mark it as completed.'
+                                                  '\n\nYou can delete medicine item once the course is expired'
+                                                  '\n\nClick the red circle once you consumed the medicine'
                                                   '\n\nPress the white notes icon on the item, to check any side note attached with the item.',
                                               style: GoogleFonts.robotoMono(
                                                 textStyle: Theme.of(context)

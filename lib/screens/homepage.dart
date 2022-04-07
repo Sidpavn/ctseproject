@@ -200,6 +200,131 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
+                      SizedBox(height: 10.h),
+                      Container(
+                        width: double.infinity,
+                        height: 90.h,
+                        decoration: BoxDecoration(
+                            color: Colors.green.shade200,
+                            borderRadius: BorderRadius.circular(0),
+                            border:
+                                Border.all(color: Colors.black, width: 2.0)),
+                        child: Column(
+                          children: [
+                            Flexible(
+                              child: Stack(
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            type: PageTransitionType.fade,
+                                            child: MedicinePage())),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            alignment: Alignment.topLeft,
+                                            margin: EdgeInsets.only(
+                                                top: 10.h,
+                                                left: 15.h,
+                                                right: 15.h),
+                                            child: RichText(
+                                                textAlign: TextAlign.left,
+                                                text: TextSpan(children: [
+                                                  storage.getItem(
+                                                              ('medicineItemCount')) ==
+                                                          1
+                                                      ? TextSpan(
+                                                          text:
+                                                              'Today you have \n${storage.getItem(('medicineItemCount'))} medicines',
+                                                          style: GoogleFonts
+                                                              .robotoMono(
+                                                            textStyle: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline4,
+                                                            color: Colors.black,
+                                                            fontSize: 18.h,
+                                                            fontWeight:
+                                                                FontWeight.w800,
+                                                            fontStyle: FontStyle
+                                                                .normal,
+                                                          ),
+                                                        )
+                                                      : TextSpan(
+                                                          text:
+                                                              'Today you have \n${storage.getItem(('medicineItemCount'))} medicines',
+                                                          style: GoogleFonts
+                                                              .robotoMono(
+                                                            textStyle: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline4,
+                                                            color: Colors.black,
+                                                            fontSize: 18.h,
+                                                            fontWeight:
+                                                                FontWeight.w800,
+                                                            fontStyle: FontStyle
+                                                                .normal,
+                                                          ),
+                                                        )
+                                                ]))),
+                                        Container(
+                                            alignment: Alignment.topLeft,
+                                            margin: EdgeInsets.only(
+                                                top: 5.h,
+                                                left: 15.h,
+                                                right: 15.h),
+                                            child: RichText(
+                                                textAlign: TextAlign.left,
+                                                text: TextSpan(children: [
+                                                  TextSpan(
+                                                    text:
+                                                        'take care of your health!',
+                                                    style:
+                                                        GoogleFonts.robotoMono(
+                                                      textStyle:
+                                                          Theme.of(context)
+                                                              .textTheme
+                                                              .headline4,
+                                                      color: Colors.black,
+                                                      fontSize: 10.5.h,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontStyle:
+                                                          FontStyle.normal,
+                                                    ),
+                                                  ),
+                                                ]))),
+                                      ],
+                                    ),
+                                  ),
+                                  Positioned(
+                                      left: 225.0.w,
+                                      top: -10.0.w,
+                                      child: Container(
+                                        width: 120.0.w,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.black, width: 2.h),
+                                          color: Colors.lightGreen.shade400,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.elliptical(90.h, 90.h)),
+                                        ),
+                                        child: IconButton(
+                                          iconSize: 90.0.h,
+                                          icon: const Icon(
+                                              Icons.arrow_forward_outlined,
+                                              size: 30.0),
+                                          onPressed: () {},
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -368,6 +493,32 @@ class _HomePageState extends State<HomePage> {
     await fetchUsername();
     await fetchUserPosition();
     await setCurrentDateTime();
+    await fetchMedicine();
+  }
+
+  fetchMedicine() async {
+    int medicineLength = 0;
+    String currentDate = '';
+    List dateList = [];
+    await userDataCollection
+        .doc('ctse_user_001')
+        .get()
+        .then((ds) => medicineLength = ds['medicineitems'].length);
+    for (int i = 0; i < medicineLength; i++) {
+      await userDataCollection
+          .doc('ctse_user_001')
+          .get()
+          .then((ds) => currentDate = ds['medicineitems'][i]['date']);
+      if (formattedDate == currentDate) {
+        dateList.add(currentDate);
+      }
+    }
+    if (storage.getItem('medicineItemCount') == null) {
+      await storage.setItem('medicineItemCount', 0);
+    }
+    await storage.setItem('medicineItemCount', dateList.length);
+    await storage.setItem('medicine_length', medicineLength);
+    debugPrint('medicineItemCount' + dateList.length.toString());
   }
 
   setCurrentDateTime() async {

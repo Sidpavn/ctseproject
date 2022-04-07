@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:ctseproject/screens/kajathees/medicine_list_page.dart';
-import 'package:ctseproject/screens/sithpavan/todo_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,21 +27,9 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
   final TextEditingController noteController = TextEditingController();
   String? _selectedDate;
   String? _selectedTime;
-  String? selectedColorValue;
-  List<String> colors = [
-    'Green',
-    'Red',
-    'Orange',
-    'Blue',
-    'Purple',
-    'Yellow',
-    'Pink',
-    'Teal'
-  ];
-  String? selectedPriorityValue;
-  List<String> priorities = ['High', 'Medium', 'Low'];
   List itemContent = [];
   List oldItemContent = [];
+  String? _selectedName;
 
   @override
   void initState() {
@@ -54,6 +41,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
       storage.setItem('medicineItemCount', 0);
       debugPrint('medicine item null');
     }
+    _selectedName = storage.getItem('medicine_name');
   }
 
   Future<void> check() async {
@@ -136,7 +124,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                           padding: const EdgeInsets.all(0),
                           child: MaterialButton(
                             padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            color: Colors.yellowAccent.withOpacity(0.6),
+                            color: Colors.green.shade100,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0.0),
                                 side: const BorderSide(
@@ -285,7 +273,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                           padding: const EdgeInsets.all(0),
                           child: MaterialButton(
                             padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            color: Colors.yellowAccent.withOpacity(0.6),
+                            color: Colors.green.shade100,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0.0),
                                 side: const BorderSide(
@@ -582,11 +570,12 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                         ),
                         SizedBox(height: 20.h),
                         Container(
+                          alignment: Alignment.center,
                           width: double.infinity,
                           padding: const EdgeInsets.all(0),
                           child: MaterialButton(
                             padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                            color: Colors.lightBlueAccent.shade100,
+                            color: Colors.green.shade400,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0.0),
                                 side: const BorderSide(
@@ -596,17 +585,26 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                               children: [
                                 Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: Text(
-                                    'Submit',
-                                    style: GoogleFonts.robotoMono(
-                                      textStyle:
-                                          Theme.of(context).textTheme.headline4,
-                                      color: Colors.black,
-                                      fontSize: 20.h,
-                                      fontWeight: FontWeight.w700,
-                                      fontStyle: FontStyle.normal,
-                                    ),
+                                      const EdgeInsets.fromLTRB(120, 0, 0, 0),
+                                  child: Column(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          'Submit',
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.robotoMono(
+                                            textStyle: Theme.of(context)
+                                                .textTheme
+                                                .headline4,
+                                            color: Colors.black,
+                                            fontSize: 20.h,
+                                            fontWeight: FontWeight.w700,
+                                            fontStyle: FontStyle.normal,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -634,9 +632,6 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                                   debugPrint(
                                       '${storage.getItem('medicineItemCount')} $_selectedDate '
                                       '$_selectedTime ${titleController.text.trim()}');
-                                  if (selectedColorValue == 'Green') {
-                                    colorValue = '0xff4caf50';
-                                  }
                                   showDialog(
                                       context: context,
                                       barrierDismissible: false,
@@ -690,7 +685,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                                       context,
                                       PageTransition(
                                           type: PageTransitionType.fade,
-                                          child: ToDoPage()));
+                                          child: MedicinePage()));
                                   Fluttertoast.showToast(
                                     msg: 'Medicine item added.',
                                     toastLength: Toast.LENGTH_SHORT,

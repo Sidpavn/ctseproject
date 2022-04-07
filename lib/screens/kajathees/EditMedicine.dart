@@ -27,19 +27,8 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
   final TextEditingController noteController = TextEditingController();
   String? _selectedDate;
   String? _selectedTime;
-  String? selectedColorValue;
-  List<String> colors = [
-    'Green',
-    'Red',
-    'Orange',
-    'Blue',
-    'Purple',
-    'Yellow',
-    'Pink',
-    'Teal'
-  ];
-  String? selectedPriorityValue;
-  List<String> priorities = ['High', 'Medium', 'Low'];
+  String? _selectedName;
+
   List itemContent = [];
   List oldItemContent = [];
 
@@ -52,6 +41,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
     _selectedTime = storage.getItem('medicine_time');
     titleController.text = storage.getItem('medicine_name');
     noteController.text = storage.getItem('medicine_note');
+    _selectedName = storage.getItem('medicine_name');
   }
 
   Future<void> check() async {
@@ -134,7 +124,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                           padding: const EdgeInsets.all(0),
                           child: MaterialButton(
                             padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            color: Colors.yellowAccent.withOpacity(0.6),
+                            color: Colors.green.shade100,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0.0),
                                 side: const BorderSide(
@@ -146,7 +136,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                   padding:
                                       const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                   child: Text(
-                                    'Enter Medicine item:',
+                                    '$_selectedName',
                                     style: GoogleFonts.robotoMono(
                                       textStyle:
                                           Theme.of(context).textTheme.headline4,
@@ -169,7 +159,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                         insetPadding:
                                             const EdgeInsets.all(10.0),
                                         backgroundColor: Colors.white,
-                                        title: Text('Enter medicine item',
+                                        title: Text('Edit Medicine',
                                             style: GoogleFonts.robotoMono(
                                               textStyle: Theme.of(context)
                                                   .textTheme
@@ -205,7 +195,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                     textStyle: Theme.of(context)
                                                         .textTheme
                                                         .headline4,
-                                                    color: Colors.black,
+                                                    color: Colors.green,
                                                     fontSize: 12.h,
                                                     fontWeight: FontWeight.w500,
                                                     fontStyle: FontStyle.normal,
@@ -283,7 +273,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                           padding: const EdgeInsets.all(0),
                           child: MaterialButton(
                             padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            color: Colors.yellowAccent.withOpacity(0.6),
+                            color: Colors.green.shade100,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0.0),
                                 side: const BorderSide(
@@ -587,7 +577,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                               child: MaterialButton(
                                 padding:
                                     const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                                color: Colors.redAccent.shade100,
+                                color: Colors.redAccent,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(0.0),
                                     side: const BorderSide(
@@ -656,9 +646,6 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                                   20,
                                                                   10,
                                                                   20),
-                                                          color: Colors
-                                                              .redAccent
-                                                              .shade100,
                                                           shape: RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
@@ -666,8 +653,8 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                                           0.0),
                                                               side: const BorderSide(
                                                                   color: Colors
-                                                                      .black,
-                                                                  width: 1.0)),
+                                                                      .red,
+                                                                  width: 2.0)),
                                                           highlightElevation: 0,
                                                           child: Row(
                                                             children: [
@@ -744,9 +731,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                                   20,
                                                                   10,
                                                                   20),
-                                                          color: Colors
-                                                              .lightBlueAccent
-                                                              .shade100,
+                                                          color: Colors.red,
                                                           shape: RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
@@ -820,7 +805,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                                               height: 30,
                                                                             ),
                                                                             CircularProgressIndicator(
-                                                                              backgroundColor: Colors.yellowAccent,
+                                                                              backgroundColor: Colors.greenAccent,
                                                                               valueColor: AlwaysStoppedAnimation<Color>(Colors.black26),
                                                                             ),
                                                                             SizedBox(
@@ -932,7 +917,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                               child: MaterialButton(
                                 padding:
                                     const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                                color: Colors.lightBlueAccent.shade100,
+                                color: Colors.amberAccent,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(0.0),
                                     side: const BorderSide(
@@ -994,7 +979,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                     ),
                                                     CircularProgressIndicator(
                                                       backgroundColor:
-                                                          Colors.yellowAccent,
+                                                          Colors.green,
                                                       valueColor:
                                                           AlwaysStoppedAnimation<
                                                                   Color>(
