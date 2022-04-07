@@ -2,8 +2,9 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:ctseproject/screens/kajathees/medicine_list_page.dart';
-import 'package:ctseproject/screens/sithpavan/add_todo.dart';
+import 'package:ctseproject/screens/kajathees/EditMedicine.dart';
+import 'package:ctseproject/screens/kajathees/add_medicine.dart';
+import 'package:ctseproject/screens/sithpavan/todo_page.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,14 +18,13 @@ import 'package:page_transition/page_transition.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
 
 import '../homepage.dart';
-import 'edit_todo.dart';
 
-class ToDoPage extends StatefulWidget {
+class MedicinePage extends StatefulWidget {
   @override
-  _ToDoPageState createState() => _ToDoPageState();
+  _MedicinePageState createState() => _MedicinePageState();
 }
 
-class _ToDoPageState extends State<ToDoPage> {
+class _MedicinePageState extends State<MedicinePage> {
   late String name;
   late bool connected;
   late bool checkedValue;
@@ -89,7 +89,7 @@ class _ToDoPageState extends State<ToDoPage> {
                   Row(
                     children: [
                       Text(
-                        'To-Do List',
+                        'Medicine List',
                         style: GoogleFonts.robotoMono(
                           textStyle: Theme.of(context).textTheme.headline4,
                           color: Colors.black,
@@ -108,8 +108,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                 return AlertDialog(
                                   insetPadding: const EdgeInsets.all(10.0),
                                   backgroundColor: Colors.white,
-                                  title: Text(
-                                      'Edit, Remove,\nCheck your To-Do Items.',
+                                  title: Text('We will help you to schedule',
                                       style: GoogleFonts.robotoMono(
                                         textStyle: Theme.of(context)
                                             .textTheme
@@ -128,9 +127,9 @@ class _ToDoPageState extends State<ToDoPage> {
                                         text: TextSpan(children: [
                                           TextSpan(
                                               text:
-                                                  'Touch the to-do item to edit its content.'
-                                                  '\n\nYou can remove it from the list too if you want too.'
-                                                  '\n\nPress the red circle on the item, to mark it as completed.'
+                                                  'Touch the medicine item to edit its content.'
+                                                  '\n\nYou can delete medicine item once the course is expired'
+                                                  '\n\nClick the red circle once you consumed the medicine'
                                                   '\n\nPress the white notes icon on the item, to check any side note attached with the item.',
                                               style: GoogleFonts.robotoMono(
                                                 textStyle: Theme.of(context)
@@ -197,7 +196,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                   shrinkWrap: true,
                                   reverse: true,
                                   itemCount:
-                                      snapshot.data!['todolistitems'].length,
+                                      snapshot.data!['medicineitems'].length,
                                   itemBuilder: (context, i) {
                                     return Container(
                                         margin: const EdgeInsets.only(top: 10),
@@ -206,16 +205,9 @@ class _ToDoPageState extends State<ToDoPage> {
                                             MaterialButton(
                                               elevation: 0,
                                               highlightElevation: 0,
-                                              highlightColor: Color(int.parse(
-                                                      snapshot.data![
-                                                              'todolistitems']
-                                                          [i]['card_color']))
-                                                  .withOpacity(0.2),
-                                              color: Color(int.parse(
-                                                      snapshot.data![
-                                                              'todolistitems']
-                                                          [i]['card_color']))
-                                                  .withOpacity(0.5),
+                                              highlightColor: Colors.green,
+                                              color:
+                                                  Colors.green.withOpacity(0.5),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(5),
@@ -233,7 +225,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      snapshot.data!['todolistitems']
+                                                      snapshot.data!['medicineitems']
                                                                   [i]['date'] ==
                                                               DateFormat(
                                                                       'dd/MM/yyyy')
@@ -241,8 +233,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                                                       DateTime
                                                                           .now())
                                                           ? Text(
-                                                              'On Today, ${snapshot.data!['todolistitems'][i]['time']}, '
-                                                              '${snapshot.data!['todolistitems'][i]['priority']} Priority',
+                                                              'On Today, ${snapshot.data!['medicineitems'][i]['time']}, ',
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
@@ -265,9 +256,8 @@ class _ToDoPageState extends State<ToDoPage> {
                                                               ),
                                                             )
                                                           : Text(
-                                                              'On ${snapshot.data!['todolistitems'][i]['date']}, '
-                                                              '${snapshot.data!['todolistitems'][i]['time']}, '
-                                                              '${snapshot.data!['todolistitems'][i]['priority']} Priority',
+                                                              'On ${snapshot.data!['medicineitems'][i]['date']}, '
+                                                              '${snapshot.data!['medicineitems'][i]['time']}, ',
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
@@ -303,7 +293,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                                                 text: TextSpan(
                                                                     children: [
                                                                       TextSpan(
-                                                                          text: snapshot.data!['todolistitems'][i]
+                                                                          text: snapshot.data!['medicineitems'][i]
                                                                               [
                                                                               'item_name'],
                                                                           style:
@@ -369,47 +359,32 @@ class _ToDoPageState extends State<ToDoPage> {
                                                         );
                                                       });
                                                   await storage.setItem(
-                                                      'todo_item_name',
+                                                      'medicine_name',
                                                       snapshot.data![
-                                                              'todolistitems']
+                                                              'medicineitems']
                                                           [i]['item_name']);
                                                   await storage.setItem(
-                                                      'todo_note',
+                                                      'medicine_note',
                                                       snapshot.data![
-                                                              'todolistitems']
+                                                              'medicineitems']
                                                           [i]['note']);
                                                   await storage.setItem(
-                                                      'todo_date',
+                                                      'medicine_date',
                                                       snapshot.data![
-                                                              'todolistitems']
+                                                              'medicineitems']
                                                           [i]['date']);
                                                   await storage.setItem(
-                                                      'todo_time',
+                                                      'medicine_time',
                                                       snapshot.data![
-                                                              'todolistitems']
+                                                              'medicineitems']
                                                           [i]['time']);
                                                   await storage.setItem(
-                                                      'todo_card_color',
+                                                      'medicine_checked_status',
                                                       snapshot.data![
-                                                              'todolistitems']
-                                                          [i]['card_color']);
-                                                  await storage.setItem(
-                                                      'todo_card_color_name',
-                                                      snapshot.data![
-                                                              'todolistitems'][i]
-                                                          ['card_color_name']);
-                                                  await storage.setItem(
-                                                      'todo_priority',
-                                                      snapshot.data![
-                                                              'todolistitems']
-                                                          [i]['priority']);
-                                                  await storage.setItem(
-                                                      'todo_checked_status',
-                                                      snapshot.data![
-                                                              'todolistitems']
+                                                              'medicineitems']
                                                           [i]['checked']);
                                                   await storage.setItem(
-                                                      'todo_item_id', i);
+                                                      'medicine_item_id', i);
                                                   Navigator.push(
                                                       context,
                                                       PageTransition(
@@ -417,7 +392,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                                               PageTransitionType
                                                                   .fade,
                                                           child:
-                                                              EditToDoPage()));
+                                                              EditMedicinePage()));
                                                 } else if (connected == false) {
                                                   Fluttertoast.showToast(
                                                     msg: 'Network Error',
@@ -446,7 +421,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                                 checkedColor: Colors.green
                                                     .withOpacity(0.7),
                                                 isChecked: snapshot
-                                                        .data!['todolistitems']
+                                                        .data!['medicineitems']
                                                     [i]['checked'],
                                                 onTap: (selected) async {
                                                   check();
@@ -495,34 +470,22 @@ class _ToDoPageState extends State<ToDoPage> {
                                                         .get()
                                                         .then((ds) =>
                                                             oldItemContent = ds[
-                                                                'todolistitems']);
+                                                                'medicineitems']);
                                                     oldItemContent.removeAt(i);
                                                     itemContent.add({
                                                       "date": snapshot.data![
-                                                              'todolistitems']
+                                                              'medicineitems']
                                                           [i]['date'],
                                                       "time": snapshot.data![
-                                                              'todolistitems']
+                                                              'medicineitems']
                                                           [i]['time'],
                                                       "item_name": snapshot
                                                                   .data![
-                                                              'todolistitems']
+                                                              'medicineitems']
                                                           [i]['item_name'],
-                                                      "card_color": snapshot
-                                                                  .data![
-                                                              'todolistitems']
-                                                          [i]['card_color'],
-                                                      "card_color_name": snapshot
-                                                                  .data![
-                                                              'todolistitems'][
-                                                          i]['card_color_name'],
-                                                      "priority": snapshot
-                                                                  .data![
-                                                              'todolistitems']
-                                                          [i]['priority'],
                                                       "checked": selected,
                                                       "note": snapshot.data![
-                                                              'todolistitems']
+                                                              'medicineitems']
                                                           [i]['note'],
                                                     });
                                                     oldItemContent
@@ -530,7 +493,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                                     await userDataCollection
                                                         .doc('ctse_user_001')
                                                         .update({
-                                                      'todolistitems':
+                                                      'medicineitems':
                                                           oldItemContent
                                                     });
                                                     debugPrint(
@@ -538,7 +501,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                                     if (selected == true) {
                                                       Fluttertoast.showToast(
                                                         msg:
-                                                            'To-do item checked.',
+                                                            'Selected Medicine checked.',
                                                         toastLength:
                                                             Toast.LENGTH_SHORT,
                                                         gravity: ToastGravity
@@ -552,7 +515,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                                         false) {
                                                       Fluttertoast.showToast(
                                                         msg:
-                                                            'To-do item unchecked.',
+                                                            'Selected medicine unchecked.',
                                                         toastLength:
                                                             Toast.LENGTH_SHORT,
                                                         gravity: ToastGravity
@@ -588,7 +551,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                                 size: 50,
                                               ),
                                             ),
-                                            snapshot.data!['todolistitems'][i]
+                                            snapshot.data!['medicineitems'][i]
                                                         ['note'] !=
                                                     ''
                                                 ? Positioned(
@@ -659,7 +622,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                                                                 textAlign: TextAlign.justify,
                                                                                 text: TextSpan(children: [
                                                                                   TextSpan(
-                                                                                      text: snapshot.data!['todolistitems'][i]['note'],
+                                                                                      text: snapshot.data!['medicineitems'][i]['note'],
                                                                                       style: GoogleFonts.robotoMono(
                                                                                         textStyle: Theme.of(context).textTheme.headline4,
                                                                                         color: Colors.black,
@@ -765,7 +728,7 @@ class _ToDoPageState extends State<ToDoPage> {
                           builder: (context,
                               AsyncSnapshot<DocumentSnapshot> snapshot) {
                             if (snapshot.hasData) {
-                              return snapshot.data!['todolistitems'].length == 0
+                              return snapshot.data!['medicineitems'].length == 0
                                   ? Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
@@ -860,7 +823,7 @@ class _ToDoPageState extends State<ToDoPage> {
               Navigator.push(
                   context,
                   PageTransition(
-                      type: PageTransitionType.fade, child: AddToDoPage()));
+                      type: PageTransitionType.fade, child: AddMedicinePage()));
             },
           ),
         ),
@@ -936,7 +899,7 @@ class _ToDoPageState extends State<ToDoPage> {
               ),
             ),
           ],
-          currentIndex: 1,
+          currentIndex: 2,
           onTap: (index) {
             setState(() {
               _currentIndex = index;
@@ -954,6 +917,10 @@ class _ToDoPageState extends State<ToDoPage> {
               });
             }
             if (_currentIndex == 1) {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade, child: ToDoPage()));
               setState(() {
                 _currentIndex = index;
               });
