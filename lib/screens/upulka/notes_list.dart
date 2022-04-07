@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:ctseproject/screens/kajathees/medicine_list_page.dart';
 import 'package:ctseproject/screens/sithpavan/todo_page.dart';
-// import 'package:ctseproject/screens/sithpavan/add_todo.dart';
 import 'package:ctseproject/screens/upulka/add_note.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';

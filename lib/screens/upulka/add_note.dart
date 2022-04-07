@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:ctseproject/screens/sithpavan/todo_page.dart';
 import 'package:ctseproject/screens/upulka/notes_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -493,61 +492,7 @@ class _AddNoteState extends State<AddNote> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         ),
                         SizedBox(height: 5.h),
-                        // Row(////////////////////////
-                        //   children: [
-                        //     Text('Time:',
-                        //         style: GoogleFonts.robotoMono(
-                        //           textStyle: Theme.of(context).textTheme.headline4,
-                        //           color: Colors.black,
-                        //           fontSize: 14.h,
-                        //           fontWeight: FontWeight.w500,
-                        //           fontStyle: FontStyle.normal,
-                        //         )
-                        //     ),
-                        //     Container(
-                        //       width: 250.h,
-                        //       padding: const EdgeInsets.all(0),
-                        //       child: MaterialButton(
-                        //         padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                        //         color: Colors.white.withOpacity(0.6),
-                        //         shape: RoundedRectangleBorder(
-                        //             borderRadius: BorderRadius.circular(0.0),
-                        //             side: const BorderSide(color: Colors.black,width: 1.0)
-                        //         ),
-                        //         highlightElevation: 0,
-                        //         child: Row(
-                        //           children: [
-                        //             Container(
-                        //               padding: const EdgeInsets.fromLTRB( 10, 0, 0, 0),
-                        //               child: _selectedTime == null ? Text('Choose Time',
-                        //                 style:GoogleFonts.robotoMono(
-                        //                   textStyle: Theme.of(context).textTheme.headline4,
-                        //                   color: Colors.black,
-                        //                   fontSize: 15.h,
-                        //                   fontWeight: FontWeight.w500,
-                        //                   fontStyle: FontStyle.normal,
-                        //                 ),
-                        //               ) :
-                        //               Text(_selectedTime!,
-                        //                 style:GoogleFonts.robotoMono(
-                        //                   textStyle: Theme.of(context).textTheme.headline4,
-                        //                   color: Colors.black,
-                        //                   fontSize: 15.h,
-                        //                   fontWeight: FontWeight.w500,
-                        //                   fontStyle: FontStyle.normal,
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //         onPressed: () async {
-                        //           _selectTime(context);
-                        //         },
-                        //       ),
-                        //     ),                 ],
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        // ),
-                        // SizedBox(height: 20.h),
+                      
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(0),
@@ -628,12 +573,9 @@ class _AddNoteState extends State<AddNote> {
                                   await userDataCollection.doc('ctse_user_001').get().then((ds) => oldItemContent = ds['notelistitems']);
                                   itemContent.add({
                                     "date" : _selectedDate,
-                                    // "time" : _selectedTime,
                                     "item_name" : titleController.text.trim(),
                                     "card_color" : colorValue,
                                     "card_color_name" : selectedColorValue,
-                                    // "priority" : selectedPriorityValue,
-                                    // "checked" : false,
                                     "note" : noteController.text.trim()
                                   });
                                   itemContent.addAll(oldItemContent);

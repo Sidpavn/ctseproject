@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:ctseproject/screens/sithpavan/todo_page.dart';
 import 'package:ctseproject/screens/upulka/notes_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -770,12 +769,9 @@ class _EditNotePageState extends State<EditNotePage> {
                                   oldItemContent.removeAt(storage.getItem('note_item_id'));
                                   itemContent.add({
                                     "date" : _selectedDate,
-                                    // "time" : _selectedTime,
                                     "item_name" : titleController.text.trim(),
                                     "card_color" : colorValue,
                                     "card_color_name" : selectedColorValue,
-                                    // "priority" : selectedPriorityValue,
-                                    // "checked" : storage.getItem('todo_checked_status'),
                                     "note" : noteController.text.trim(),
                                   });
                                   oldItemContent.addAll(itemContent);
@@ -785,7 +781,7 @@ class _EditNotePageState extends State<EditNotePage> {
                                   storage.deleteItem('note_item_id');
                                   Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: NotesList()));
                                   Fluttertoast.showToast(
-                                    msg: 'To do item updated.',
+                                    msg: 'Note updated.',
                                     toastLength: Toast.LENGTH_SHORT,
                                     gravity: ToastGravity.TOP_RIGHT,
                                     timeInSecForIosWeb: 2,
