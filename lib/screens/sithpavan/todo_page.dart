@@ -912,7 +912,7 @@ class _ToDoPageState extends State<ToDoPage> {
             CustomNavigationBarItem(
               icon: const Icon(Icons.map_outlined),
               title: Text(
-                "Home",
+                "Notes",
                 style: GoogleFonts.robotoMono(
                   textStyle: Theme.of(context).textTheme.headline4,
                   color: Colors.white,

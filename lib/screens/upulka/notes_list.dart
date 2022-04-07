@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:ctseproject/screens/kajathees/EditMedicine.dart';
-import 'package:ctseproject/screens/kajathees/add_medicine.dart';
+import 'package:ctseproject/screens/kajathees/medicine_list_page.dart';
 import 'package:ctseproject/screens/sithpavan/todo_page.dart';
+import 'package:ctseproject/screens/upulka/add_note.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,13 +18,14 @@ import 'package:page_transition/page_transition.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
 
 import '../homepage.dart';
+import 'edit_note.dart';
 
-class MedicinePage extends StatefulWidget {
+class NotesList extends StatefulWidget {
   @override
-  _MedicinePageState createState() => _MedicinePageState();
+  _NotesListState createState() => _NotesListState();
 }
 
-class _MedicinePageState extends State<MedicinePage> {
+class _NotesListState extends State<NotesList> {
   late String name;
   late bool connected;
   late bool checkedValue;
@@ -37,18 +38,9 @@ class _MedicinePageState extends State<MedicinePage> {
   String? _selectedDate;
   String? _selectedTime;
   String? selectedColorValue;
-  List<String> colors = [
-    'Green',
-    'Red',
-    'Orange',
-    'Blue',
-    'Purple',
-    'Yellow',
-    'Pink',
-    'Teal'
-  ];
-  String? selectedPriorityValue;
-  List<String> priorities = ['High', 'Medium', 'Low'];
+  List<String> colors = ['Green', 'Red', 'Orange', 'Blue', 'Purple', 'Yellow', 'Pink', 'Teal' ];
+  // String? selectedPriorityValue;
+  // List<String> priorities = ['High', 'Medium', 'Low'];
   List itemContent = [];
   List oldItemContent = [];
 
@@ -89,7 +81,7 @@ class _MedicinePageState extends State<MedicinePage> {
                   Row(
                     children: [
                       Text(
-                        'Medicine List',
+                        'Notes',
                         style: GoogleFonts.robotoMono(
                           textStyle: Theme.of(context).textTheme.headline4,
                           color: Colors.black,
@@ -108,7 +100,8 @@ class _MedicinePageState extends State<MedicinePage> {
                                 return AlertDialog(
                                   insetPadding: const EdgeInsets.all(10.0),
                                   backgroundColor: Colors.white,
-                                  title: Text('We will help you to schedule',
+                                  title: Text(
+                                      'Edit, Remove,\nCheck your notes.',
                                       style: GoogleFonts.robotoMono(
                                         textStyle: Theme.of(context)
                                             .textTheme
@@ -127,10 +120,8 @@ class _MedicinePageState extends State<MedicinePage> {
                                         text: TextSpan(children: [
                                           TextSpan(
                                               text:
-                                                  'Touch the medicine item to edit its content.'
-                                                  '\n\nYou can delete medicine item once the course is expired'
-                                                  '\n\nClick the red circle once you consumed the medicine'
-                                                  '\n\nPress the white notes icon on the item, to check any side note attached with the item.',
+                                                  'Touch the note to edit its content.'
+                                                  '\n\nA note can be removed from the list. For that, select the note you wish to delete. Then select "Delete" button in the appearing screen.',
                                               style: GoogleFonts.robotoMono(
                                                 textStyle: Theme.of(context)
                                                     .textTheme
@@ -196,7 +187,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                   shrinkWrap: true,
                                   reverse: true,
                                   itemCount:
-                                      snapshot.data!['medicineitems'].length,
+                                      snapshot.data!['notelistitems'].length,
                                   itemBuilder: (context, i) {
                                     return Container(
                                         margin: const EdgeInsets.only(top: 10),
@@ -205,9 +196,16 @@ class _MedicinePageState extends State<MedicinePage> {
                                             MaterialButton(
                                               elevation: 0,
                                               highlightElevation: 0,
-                                              highlightColor: Colors.green,
-                                              color:
-                                                  Colors.green.withOpacity(0.5),
+                                              highlightColor: Color(int.parse(
+                                                      snapshot.data![
+                                                              'notelistitems']
+                                                          [i]['card_color']))
+                                                  .withOpacity(0.2),
+                                              color: Color(int.parse(
+                                                      snapshot.data![
+                                                              'notelistitems']
+                                                          [i]['card_color']))
+                                                  .withOpacity(0.5),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(5),
@@ -225,7 +223,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      snapshot.data!['medicineitems']
+                                                      snapshot.data!['notelistitems']
                                                                   [i]['date'] ==
                                                               DateFormat(
                                                                       'dd/MM/yyyy')
@@ -233,7 +231,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                                                       DateTime
                                                                           .now())
                                                           ? Text(
-                                                              'On Today, ${snapshot.data!['medicineitems'][i]['time']}, ',
+                                                              'On Today ',
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
@@ -256,8 +254,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                                               ),
                                                             )
                                                           : Text(
-                                                              'On ${snapshot.data!['medicineitems'][i]['date']}, '
-                                                              '${snapshot.data!['medicineitems'][i]['time']}, ',
+                                                              'On ${snapshot.data!['notelistitems'][i]['date']} ',
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
@@ -293,7 +290,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                                                 text: TextSpan(
                                                                     children: [
                                                                       TextSpan(
-                                                                          text: snapshot.data!['medicineitems'][i]
+                                                                          text: snapshot.data!['notelistitems'][i]
                                                                               [
                                                                               'item_name'],
                                                                           style:
@@ -359,32 +356,47 @@ class _MedicinePageState extends State<MedicinePage> {
                                                         );
                                                       });
                                                   await storage.setItem(
-                                                      'medicine_name',
+                                                      'note_item_name',
                                                       snapshot.data![
-                                                              'medicineitems']
+                                                              'notelistitems']
                                                           [i]['item_name']);
                                                   await storage.setItem(
-                                                      'medicine_note',
+                                                      'note_note',
                                                       snapshot.data![
-                                                              'medicineitems']
+                                                              'notelistitems']
                                                           [i]['note']);
                                                   await storage.setItem(
-                                                      'medicine_date',
+                                                      'note_date',
                                                       snapshot.data![
-                                                              'medicineitems']
+                                                              'notelistitems']
                                                           [i]['date']);
                                                   await storage.setItem(
-                                                      'medicine_time',
+                                                      'note_time',
                                                       snapshot.data![
-                                                              'medicineitems']
+                                                              'notelistitems']
                                                           [i]['time']);
                                                   await storage.setItem(
-                                                      'medicine_checked_status',
+                                                      'note_card_color',
                                                       snapshot.data![
-                                                              'medicineitems']
+                                                              'notelistitems']
+                                                          [i]['card_color']);
+                                                  await storage.setItem(
+                                                      'note_card_color_name',
+                                                      snapshot.data![
+                                                              'notelistitems'][i]
+                                                          ['card_color_name']);
+                                                  await storage.setItem(
+                                                      'note_priority',
+                                                      snapshot.data![
+                                                              'notelistitems']
+                                                          [i]['priority']);
+                                                  await storage.setItem(
+                                                      'note_checked_status',
+                                                      snapshot.data![
+                                                              'notelistitems']
                                                           [i]['checked']);
                                                   await storage.setItem(
-                                                      'medicine_item_id', i);
+                                                      'note_item_id', i);
                                                   Navigator.push(
                                                       context,
                                                       PageTransition(
@@ -392,7 +404,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                                               PageTransitionType
                                                                   .fade,
                                                           child:
-                                                              EditMedicinePage()));
+                                                              EditNotePage()));
                                                 } else if (connected == false) {
                                                   Fluttertoast.showToast(
                                                     msg: 'Network Error',
@@ -421,7 +433,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                                 checkedColor: Colors.green
                                                     .withOpacity(0.7),
                                                 isChecked: snapshot
-                                                        .data!['medicineitems']
+                                                        .data!['notelistitems']
                                                     [i]['checked'],
                                                 onTap: (selected) async {
                                                   check();
@@ -470,22 +482,34 @@ class _MedicinePageState extends State<MedicinePage> {
                                                         .get()
                                                         .then((ds) =>
                                                             oldItemContent = ds[
-                                                                'medicineitems']);
+                                                                'notelistitems']);
                                                     oldItemContent.removeAt(i);
                                                     itemContent.add({
                                                       "date": snapshot.data![
-                                                              'medicineitems']
+                                                              'notelistitems']
                                                           [i]['date'],
                                                       "time": snapshot.data![
-                                                              'medicineitems']
+                                                              'notelistitems']
                                                           [i]['time'],
                                                       "item_name": snapshot
                                                                   .data![
-                                                              'medicineitems']
+                                                              'notelistitems']
                                                           [i]['item_name'],
+                                                      "card_color": snapshot
+                                                                  .data![
+                                                              'notelistitems']
+                                                          [i]['card_color'],
+                                                      "card_color_name": snapshot
+                                                                  .data![
+                                                              'notelistitems'][
+                                                          i]['card_color_name'],
+                                                      "priority": snapshot
+                                                                  .data![
+                                                              'notelistitems']
+                                                          [i]['priority'],
                                                       "checked": selected,
                                                       "note": snapshot.data![
-                                                              'medicineitems']
+                                                              'notelistitems']
                                                           [i]['note'],
                                                     });
                                                     oldItemContent
@@ -493,7 +517,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                                     await userDataCollection
                                                         .doc('ctse_user_001')
                                                         .update({
-                                                      'medicineitems':
+                                                      'notelistitems':
                                                           oldItemContent
                                                     });
                                                     debugPrint(
@@ -501,7 +525,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                                     if (selected == true) {
                                                       Fluttertoast.showToast(
                                                         msg:
-                                                            'Selected Medicine checked.',
+                                                            'Note checked.',
                                                         toastLength:
                                                             Toast.LENGTH_SHORT,
                                                         gravity: ToastGravity
@@ -515,7 +539,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                                         false) {
                                                       Fluttertoast.showToast(
                                                         msg:
-                                                            'Selected medicine unchecked.',
+                                                            'Note item unchecked.',
                                                         toastLength:
                                                             Toast.LENGTH_SHORT,
                                                         gravity: ToastGravity
@@ -551,7 +575,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                                 size: 50,
                                               ),
                                             ),
-                                            snapshot.data!['medicineitems'][i]
+                                            snapshot.data!['notelistitems'][i]
                                                         ['note'] !=
                                                     ''
                                                 ? Positioned(
@@ -622,7 +646,7 @@ class _MedicinePageState extends State<MedicinePage> {
                                                                                 textAlign: TextAlign.justify,
                                                                                 text: TextSpan(children: [
                                                                                   TextSpan(
-                                                                                      text: snapshot.data!['medicineitems'][i]['note'],
+                                                                                      text: snapshot.data!['todolistitems'][i]['note'],
                                                                                       style: GoogleFonts.robotoMono(
                                                                                         textStyle: Theme.of(context).textTheme.headline4,
                                                                                         color: Colors.black,
@@ -728,7 +752,7 @@ class _MedicinePageState extends State<MedicinePage> {
                           builder: (context,
                               AsyncSnapshot<DocumentSnapshot> snapshot) {
                             if (snapshot.hasData) {
-                              return snapshot.data!['medicineitems'].length == 0
+                              return snapshot.data!['notelistitems'].length == 0
                                   ? Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
@@ -823,7 +847,7 @@ class _MedicinePageState extends State<MedicinePage> {
               Navigator.push(
                   context,
                   PageTransition(
-                      type: PageTransitionType.fade, child: AddMedicinePage()));
+                      type: PageTransitionType.fade, child: AddNote()));
             },
           ),
         ),
@@ -847,7 +871,7 @@ class _MedicinePageState extends State<MedicinePage> {
               ),
             ),
             CustomNavigationBarItem(
-              icon: const Icon(Icons.list_alt_outlined),
+              icon: const Icon(Icons.map_outlined),
               title: Text(
                 "To-Do",
                 style: GoogleFonts.robotoMono(
@@ -873,7 +897,7 @@ class _MedicinePageState extends State<MedicinePage> {
               ),
             ),
             CustomNavigationBarItem(
-              icon: const Icon(Icons.map_outlined),
+              icon: const Icon(Icons.list_alt_outlined),
               title: Text(
                 "Notes",
                 style: GoogleFonts.robotoMono(
@@ -899,7 +923,7 @@ class _MedicinePageState extends State<MedicinePage> {
               ),
             ),
           ],
-          currentIndex: 2,
+          currentIndex: 1,
           onTap: (index) {
             setState(() {
               _currentIndex = index;
@@ -917,7 +941,7 @@ class _MedicinePageState extends State<MedicinePage> {
               });
             }
             if (_currentIndex == 1) {
-              Navigator.push(
+                            Navigator.push(
                   context,
                   PageTransition(
                       type: PageTransitionType.fade, child: ToDoPage()));
@@ -935,10 +959,10 @@ class _MedicinePageState extends State<MedicinePage> {
               });
             }
             if (_currentIndex == 3) {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.fade, child: HomePage()));
+              // Navigator.push(
+              //     context,
+              //     PageTransition(
+              //         type: PageTransitionType.fade, child: NotesList()));
               setState(() {
                 _currentIndex = index;
               });

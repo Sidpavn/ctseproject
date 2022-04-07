@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctseproject/screens/kajathees/medicine_list_page.dart';
 import 'package:ctseproject/screens/sithpavan/todo_page.dart';
+import 'package:ctseproject/screens/upulka/notes_list.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -380,7 +381,7 @@ class _HomePageState extends State<HomePage> {
             CustomNavigationBarItem(
               icon: const Icon(Icons.map_outlined),
               title: Text(
-                "Home",
+                "Notes",
                 style: GoogleFonts.robotoMono(
                   textStyle: Theme.of(context).textTheme.headline4,
                   color: Colors.white,
@@ -439,7 +440,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                   context,
                   PageTransition(
-                      type: PageTransitionType.fade, child: HomePage()));
+                      type: PageTransitionType.fade, child: NotesList()));
               setState(() {
                 _currentIndex = index;
               });
