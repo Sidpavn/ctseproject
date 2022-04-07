@@ -367,7 +367,7 @@ class _AddNoteState extends State<AddNote> {
                                         mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text('You can view it by pressing the "i" icon on the todo item.',
+                                          Text('You can view it by pressing the "i" icon on the note.',
                                               style:GoogleFonts.robotoMono(
                                                 textStyle: Theme.of(context).textTheme.headline4,
                                                 color: Colors.black,
