@@ -2,9 +2,8 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:ctseproject/screens/kajathees/medicine_list_page.dart';
-import 'package:ctseproject/screens/sithpavan/todo_page.dart';
-import 'package:ctseproject/screens/upulka/add_note.dart';
+import 'package:ctseproject/screens/todo/todo_page.dart';
+import 'package:ctseproject/screens/lecture_note/notes_list.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,29 +17,39 @@ import 'package:page_transition/page_transition.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
 
 import '../homepage.dart';
-import 'edit_note.dart';
+import 'add_grocery_items.dart';
+import 'edit_grocery_item.dart';
 
-class NotesList extends StatefulWidget {
+class GroceryItemPage extends StatefulWidget {
   @override
-  _NotesListState createState() => _NotesListState();
+  _GroceryItemPageState createState() => _GroceryItemPageState();
 }
 
-class _NotesListState extends State<NotesList> {
+class _GroceryItemPageState extends State<GroceryItemPage> {
   late String name;
   late bool connected;
   late bool checkedValue;
 
-  int _currentIndex = 1;
+  int _currentIndex = 4;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final CollectionReference userDataCollection =
-      FirebaseFirestore.instance.collection("Users");
+  FirebaseFirestore.instance.collection("Users");
   final LocalStorage storage = LocalStorage('ReminderApp');
   String? _selectedDate;
   String? _selectedTime;
   String? selectedColorValue;
-  List<String> colors = ['Green', 'Red', 'Orange', 'Blue', 'Purple', 'Yellow', 'Pink', 'Teal' ];
-  // String? selectedPriorityValue;
-  // List<String> priorities = ['High', 'Medium', 'Low'];
+  List<String> colors = [
+    'Green',
+    'Red',
+    'Orange',
+    'Blue',
+    'Purple',
+    'Yellow',
+    'Pink',
+    'Teal'
+  ];
+  String? selectedPriorityValue;
+  List<String> priorities = ['High', 'Medium', 'Low'];
   List itemContent = [];
   List oldItemContent = [];
 
@@ -81,7 +90,7 @@ class _NotesListState extends State<NotesList> {
                   Row(
                     children: [
                       Text(
-                        'Notes',
+                        'Grocery List',
                         style: GoogleFonts.robotoMono(
                           textStyle: Theme.of(context).textTheme.headline4,
                           color: Colors.black,
@@ -100,8 +109,7 @@ class _NotesListState extends State<NotesList> {
                                 return AlertDialog(
                                   insetPadding: const EdgeInsets.all(10.0),
                                   backgroundColor: Colors.white,
-                                  title: Text(
-                                      'Edit, Remove,\nCheck your notes.',
+                                  title: Text('We will help you to schedule',
                                       style: GoogleFonts.robotoMono(
                                         textStyle: Theme.of(context)
                                             .textTheme
@@ -114,14 +122,15 @@ class _NotesListState extends State<NotesList> {
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: <Widget>[
                                       RichText(
                                         text: TextSpan(children: [
                                           TextSpan(
                                               text:
-                                                  'Touch the note to edit its content.'
-                                                  '\n\nA note can be removed from the list. For that, select the note you wish to delete. Then select "Delete" button in the appearing screen.',
+                                              'Touch the grocery list to edit its content.'
+                                                  '\n\nClick the red circle once you finish your grocery'
+                                                  '\n\nPress the white notes icon on the item, to check any side note attached with the item.',
                                               style: GoogleFonts.robotoMono(
                                                 textStyle: Theme.of(context)
                                                     .textTheme
@@ -141,7 +150,7 @@ class _NotesListState extends State<NotesList> {
                                         Navigator.of(context).pop();
                                       },
                                       child: Text(
-                                        'Close',
+                                        'Done',
                                         style: GoogleFonts.robotoMono(
                                           textStyle: Theme.of(context)
                                               .textTheme
@@ -178,16 +187,16 @@ class _NotesListState extends State<NotesList> {
                             if (snapshot.hasData) {
                               return GridView.builder(
                                   gridDelegate:
-                                      const SliverGridDelegateWithMaxCrossAxisExtent(
-                                          maxCrossAxisExtent: 500,
-                                          childAspectRatio: 1.5 / 1,
-                                          crossAxisSpacing: 1,
-                                          mainAxisSpacing: 1),
+                                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                                      maxCrossAxisExtent: 500,
+                                      childAspectRatio: 1.5 / 1,
+                                      crossAxisSpacing: 1,
+                                      mainAxisSpacing: 1),
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   reverse: true,
                                   itemCount:
-                                      snapshot.data!['notelistitems'].length,
+                                  snapshot.data!['groceryitems'].length,
                                   itemBuilder: (context, i) {
                                     return Container(
                                         margin: const EdgeInsets.only(top: 10),
@@ -196,19 +205,12 @@ class _NotesListState extends State<NotesList> {
                                             MaterialButton(
                                               elevation: 0,
                                               highlightElevation: 0,
-                                              highlightColor: Color(int.parse(
-                                                      snapshot.data![
-                                                              'notelistitems']
-                                                          [i]['card_color']))
-                                                  .withOpacity(0.2),
-                                              color: Color(int.parse(
-                                                      snapshot.data![
-                                                              'notelistitems']
-                                                          [i]['card_color']))
-                                                  .withOpacity(0.5),
+                                              highlightColor: Colors.green,
+                                              color:
+                                              Colors.green.withOpacity(0.5),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(5),
+                                                BorderRadius.circular(5),
                                                 side: const BorderSide(
                                                     width: 1.0,
                                                     color: Colors.black),
@@ -216,95 +218,38 @@ class _NotesListState extends State<NotesList> {
                                               child: ListTile(
                                                 title: Padding(
                                                   padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 10, 0, 0),
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 10, 0, 0),
                                                   child: Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    CrossAxisAlignment
+                                                        .start,
                                                     children: [
-                                                      snapshot.data!['notelistitems']
-                                                                  [i]['date'] ==
-                                                              DateFormat(
-                                                                      'dd/MM/yyyy')
-                                                                  .format(
-                                                                      DateTime
-                                                                          .now())
-                                                          ? Text(
-                                                              'On Today ',
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: GoogleFonts
-                                                                  .robotoMono(
-                                                                textStyle: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .headline4,
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize:
-                                                                    11.5.h,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w900,
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .normal,
-                                                              ),
-                                                            )
-                                                          : Text(
-                                                              'On ${snapshot.data!['notelistitems'][i]['date']} ',
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: GoogleFonts
-                                                                  .robotoMono(
-                                                                textStyle: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .headline4,
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize:
-                                                                    11.5.h,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w900,
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .normal,
-                                                              ),
-                                                            ),
-                                                      const Divider(
-                                                        thickness: 0.5,
-                                                        color: Colors.black,
-                                                      ),
                                                       Flexible(
                                                         child: SizedBox(
                                                             height: 145.h,
                                                             child: RichText(
                                                                 textAlign:
-                                                                    TextAlign
-                                                                        .justify,
+                                                                TextAlign
+                                                                    .justify,
                                                                 text: TextSpan(
                                                                     children: [
                                                                       TextSpan(
-                                                                          text: snapshot.data!['notelistitems'][i]
-                                                                              [
-                                                                              'item_name'],
+                                                                          text: snapshot.data!['groceryitems'][i]
+                                                                          [
+                                                                          'item_name'],
                                                                           style:
-                                                                              GoogleFonts.robotoMono(
+                                                                          GoogleFonts.robotoMono(
                                                                             textStyle:
-                                                                                Theme.of(context).textTheme.headline4,
+                                                                            Theme.of(context).textTheme.headline4,
                                                                             color:
-                                                                                Colors.black,
+                                                                            Colors.black,
                                                                             fontSize:
-                                                                                13.h,
+                                                                            13.h,
                                                                             fontWeight:
-                                                                                FontWeight.w600,
+                                                                            FontWeight.w600,
                                                                             fontStyle:
-                                                                                FontStyle.normal,
+                                                                            FontStyle.normal,
                                                                           )),
                                                                     ]))),
                                                       ),
@@ -322,17 +267,17 @@ class _NotesListState extends State<NotesList> {
                                                       context: context,
                                                       barrierDismissible: false,
                                                       builder: (BuildContext
-                                                          context) {
+                                                      context) {
                                                         return WillPopScope(
                                                           onWillPop: () async =>
-                                                              false,
+                                                          false,
                                                           child: AlertDialog(
                                                             backgroundColor:
-                                                                Colors.white,
+                                                            Colors.white,
                                                             content: Column(
                                                               mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
+                                                              MainAxisSize
+                                                                  .min,
                                                               children: const <
                                                                   Widget>[
                                                                 SizedBox(
@@ -340,10 +285,10 @@ class _NotesListState extends State<NotesList> {
                                                                 ),
                                                                 CircularProgressIndicator(
                                                                   backgroundColor:
-                                                                      Colors
-                                                                          .yellowAccent,
+                                                                  Colors
+                                                                      .yellowAccent,
                                                                   valueColor: AlwaysStoppedAnimation<
-                                                                          Color>(
+                                                                      Color>(
                                                                       Colors
                                                                           .black26),
                                                                 ),
@@ -356,66 +301,51 @@ class _NotesListState extends State<NotesList> {
                                                         );
                                                       });
                                                   await storage.setItem(
-                                                      'note_item_name',
+                                                      'grocery_name',
                                                       snapshot.data![
-                                                              'notelistitems']
-                                                          [i]['item_name']);
+                                                      'groceryitems']
+                                                      [i]['item_name']);
                                                   await storage.setItem(
-                                                      'note_note',
+                                                      'grocery_note',
                                                       snapshot.data![
-                                                              'notelistitems']
-                                                          [i]['note']);
+                                                      'groceryitems']
+                                                      [i]['note']);
                                                   await storage.setItem(
-                                                      'note_date',
+                                                      'grocery_date',
                                                       snapshot.data![
-                                                              'notelistitems']
-                                                          [i]['date']);
+                                                      'groceryitems']
+                                                      [i]['date']);
                                                   await storage.setItem(
-                                                      'note_time',
+                                                      'grocery_time',
                                                       snapshot.data![
-                                                              'notelistitems']
-                                                          [i]['time']);
+                                                      'groceryitems']
+                                                      [i]['time']);
                                                   await storage.setItem(
-                                                      'note_card_color',
+                                                      'grocery_checked_status',
                                                       snapshot.data![
-                                                              'notelistitems']
-                                                          [i]['card_color']);
+                                                      'groceryitems']
+                                                      [i]['checked']);
                                                   await storage.setItem(
-                                                      'note_card_color_name',
-                                                      snapshot.data![
-                                                              'notelistitems'][i]
-                                                          ['card_color_name']);
-                                                  await storage.setItem(
-                                                      'note_priority',
-                                                      snapshot.data![
-                                                              'notelistitems']
-                                                          [i]['priority']);
-                                                  await storage.setItem(
-                                                      'note_checked_status',
-                                                      snapshot.data![
-                                                              'notelistitems']
-                                                          [i]['checked']);
-                                                  await storage.setItem(
-                                                      'note_item_id', i);
+                                                      'grocery_item_id', i);
                                                   Navigator.push(
                                                       context,
                                                       PageTransition(
                                                           type:
-                                                              PageTransitionType
-                                                                  .fade,
+                                                          PageTransitionType
+                                                              .fade,
                                                           child:
-                                                              EditNotePage()));
+                                                          EditGroceryItemPage()));
                                                 } else if (connected == false) {
                                                   Fluttertoast.showToast(
                                                     msg: 'Network Error',
                                                     toastLength:
-                                                        Toast.LENGTH_SHORT,
+                                                    Toast.LENGTH_SHORT,
                                                     gravity:
-                                                        ToastGravity.TOP_RIGHT,
+                                                    ToastGravity.TOP_RIGHT,
                                                     timeInSecForIosWeb: 2,
                                                     textColor: Colors.red,
                                                     backgroundColor:
-                                                        Colors.black,
+                                                    Colors.black,
                                                   );
                                                 }
                                               },
@@ -425,36 +355,36 @@ class _NotesListState extends State<NotesList> {
                                               top: 160.0.w,
                                               child: RoundCheckBox(
                                                 uncheckedWidget:
-                                                    const Icon(Icons.close),
+                                                const Icon(Icons.close),
                                                 checkedWidget:
-                                                    const Icon(Icons.done),
+                                                const Icon(Icons.done),
                                                 uncheckedColor: Colors.redAccent
                                                     .withOpacity(0.7),
                                                 checkedColor: Colors.green
                                                     .withOpacity(0.7),
                                                 isChecked: snapshot
-                                                        .data!['notelistitems']
-                                                    [i]['checked'],
+                                                    .data!['groceryitems']
+                                                [i]['checked'],
                                                 onTap: (selected) async {
                                                   check();
                                                   if (connected == true) {
                                                     showDialog(
                                                         context: context,
                                                         barrierDismissible:
-                                                            false,
+                                                        false,
                                                         builder: (BuildContext
-                                                            context) {
+                                                        context) {
                                                           return WillPopScope(
                                                             onWillPop:
                                                                 () async =>
-                                                                    false,
+                                                            false,
                                                             child: AlertDialog(
                                                               backgroundColor:
-                                                                  Colors.white,
+                                                              Colors.white,
                                                               content: Column(
                                                                 mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
+                                                                MainAxisSize
+                                                                    .min,
                                                                 children: const <
                                                                     Widget>[
                                                                   SizedBox(
@@ -462,10 +392,10 @@ class _NotesListState extends State<NotesList> {
                                                                   ),
                                                                   CircularProgressIndicator(
                                                                     backgroundColor:
-                                                                        Colors
-                                                                            .yellowAccent,
+                                                                    Colors
+                                                                        .yellowAccent,
                                                                     valueColor: AlwaysStoppedAnimation<
-                                                                            Color>(
+                                                                        Color>(
                                                                         Colors
                                                                             .black26),
                                                                   ),
@@ -481,73 +411,61 @@ class _NotesListState extends State<NotesList> {
                                                         .doc('ctse_user_001')
                                                         .get()
                                                         .then((ds) =>
-                                                            oldItemContent = ds[
-                                                                'notelistitems']);
+                                                    oldItemContent = ds[
+                                                    'groceryitems']);
                                                     oldItemContent.removeAt(i);
                                                     itemContent.add({
                                                       "date": snapshot.data![
-                                                              'notelistitems']
-                                                          [i]['date'],
+                                                      'groceryitems']
+                                                      [i]['date'],
                                                       "time": snapshot.data![
-                                                              'notelistitems']
-                                                          [i]['time'],
+                                                      'groceryitems']
+                                                      [i]['time'],
                                                       "item_name": snapshot
-                                                                  .data![
-                                                              'notelistitems']
-                                                          [i]['item_name'],
-                                                      "card_color": snapshot
-                                                                  .data![
-                                                              'notelistitems']
-                                                          [i]['card_color'],
-                                                      "card_color_name": snapshot
-                                                                  .data![
-                                                              'notelistitems'][
-                                                          i]['card_color_name'],
-                                                      "priority": snapshot
-                                                                  .data![
-                                                              'notelistitems']
-                                                          [i]['priority'],
+                                                          .data![
+                                                      'groceryitems']
+                                                      [i]['item_name'],
                                                       "checked": selected,
                                                       "note": snapshot.data![
-                                                              'notelistitems']
-                                                          [i]['note'],
+                                                      'groceryitems']
+                                                      [i]['note'],
                                                     });
                                                     oldItemContent
                                                         .addAll(itemContent);
                                                     await userDataCollection
                                                         .doc('ctse_user_001')
                                                         .update({
-                                                      'notelistitems':
-                                                          oldItemContent
+                                                      'groceryitems':
+                                                      oldItemContent
                                                     });
                                                     debugPrint(
                                                         selected.toString());
                                                     if (selected == true) {
                                                       Fluttertoast.showToast(
                                                         msg:
-                                                            'Note checked.',
+                                                        'Selected grocery checked.',
                                                         toastLength:
-                                                            Toast.LENGTH_SHORT,
+                                                        Toast.LENGTH_SHORT,
                                                         gravity: ToastGravity
                                                             .TOP_RIGHT,
                                                         timeInSecForIosWeb: 1,
                                                         textColor: Colors.black,
                                                         backgroundColor:
-                                                            Colors.greenAccent,
+                                                        Colors.greenAccent,
                                                       );
                                                     } else if (selected ==
                                                         false) {
                                                       Fluttertoast.showToast(
                                                         msg:
-                                                            'Note item unchecked.',
+                                                        'Selected grocery unchecked.',
                                                         toastLength:
-                                                            Toast.LENGTH_SHORT,
+                                                        Toast.LENGTH_SHORT,
                                                         gravity: ToastGravity
                                                             .TOP_RIGHT,
                                                         timeInSecForIosWeb: 1,
                                                         textColor: Colors.black,
                                                         backgroundColor:
-                                                            Colors.redAccent,
+                                                        Colors.redAccent,
                                                       );
                                                     }
                                                     oldItemContent.clear();
@@ -558,13 +476,13 @@ class _NotesListState extends State<NotesList> {
                                                     Fluttertoast.showToast(
                                                       msg: 'Network Error',
                                                       toastLength:
-                                                          Toast.LENGTH_SHORT,
+                                                      Toast.LENGTH_SHORT,
                                                       gravity: ToastGravity
                                                           .TOP_RIGHT,
                                                       timeInSecForIosWeb: 2,
                                                       textColor: Colors.red,
                                                       backgroundColor:
-                                                          Colors.black,
+                                                      Colors.black,
                                                     );
                                                   }
                                                 },
@@ -575,146 +493,146 @@ class _NotesListState extends State<NotesList> {
                                                 size: 50,
                                               ),
                                             ),
-                                            snapshot.data!['notelistitems'][i]
-                                                        ['note'] !=
-                                                    ''
+                                            snapshot.data!['groceryitems'][i]
+                                            ['note'] !=
+                                                ''
                                                 ? Positioned(
-                                                    left: 285.0.w,
-                                                    top: -5.0.w,
-                                                    child: RoundCheckBox(
-                                                      uncheckedWidget:
-                                                          const Icon(
-                                                              Icons.notes,
-                                                              size: 20),
-                                                      checkedWidget: const Icon(
-                                                          Icons.notes,
-                                                          size: 20),
-                                                      uncheckedColor:
-                                                          Colors.white,
-                                                      checkedColor:
-                                                          Colors.white,
-                                                      isChecked: true,
-                                                      onTap: (selected) async {
-                                                        check();
-                                                        if (connected == true) {
-                                                          showDialog(
-                                                              context: context,
-                                                              builder:
-                                                                  (BuildContext
-                                                                      context) {
-                                                                return AlertDialog(
-                                                                  insetPadding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          10.0),
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .white,
-                                                                  title: Text(
-                                                                    'Note: ',
-                                                                    style: GoogleFonts
-                                                                        .robotoMono(
-                                                                      textStyle: Theme.of(
-                                                                              context)
-                                                                          .textTheme
-                                                                          .headline4,
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontSize:
-                                                                          20.5.h,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w900,
-                                                                      fontStyle:
-                                                                          FontStyle
-                                                                              .normal,
-                                                                    ),
-                                                                  ),
-                                                                  content:
-                                                                      Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    children: <
-                                                                        Widget>[
-                                                                      Flexible(
-                                                                        child: SizedBox(
-                                                                            child: RichText(
-                                                                                textAlign: TextAlign.justify,
-                                                                                text: TextSpan(children: [
-                                                                                  TextSpan(
-                                                                                      text: snapshot.data!['todolistitems'][i]['note'],
-                                                                                      style: GoogleFonts.robotoMono(
-                                                                                        textStyle: Theme.of(context).textTheme.headline4,
-                                                                                        color: Colors.black,
-                                                                                        fontSize: 13.h,
-                                                                                        fontWeight: FontWeight.w600,
-                                                                                        fontStyle: FontStyle.normal,
-                                                                                      )),
-                                                                                ]))),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  actions: <
-                                                                      Widget>[
-                                                                    MaterialButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      },
-                                                                      child:
-                                                                          Text(
-                                                                        'Close',
-                                                                        style: GoogleFonts
-                                                                            .robotoMono(
-                                                                          textStyle: Theme.of(context)
-                                                                              .textTheme
-                                                                              .headline4,
-                                                                          color:
-                                                                              Colors.redAccent,
-                                                                          fontSize:
-                                                                              15,
-                                                                          fontWeight:
-                                                                              FontWeight.w700,
-                                                                          fontStyle:
-                                                                              FontStyle.normal,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              });
-                                                        } else if (connected ==
-                                                            false) {
-                                                          Fluttertoast
-                                                              .showToast(
-                                                            msg:
-                                                                'Network Error',
-                                                            toastLength: Toast
-                                                                .LENGTH_SHORT,
-                                                            gravity:
-                                                                ToastGravity
-                                                                    .TOP_RIGHT,
-                                                            timeInSecForIosWeb:
-                                                                2,
-                                                            textColor:
-                                                                Colors.red,
+                                              left: 285.0.w,
+                                              top: -5.0.w,
+                                              child: RoundCheckBox(
+                                                uncheckedWidget:
+                                                const Icon(
+                                                    Icons.notes,
+                                                    size: 20),
+                                                checkedWidget: const Icon(
+                                                    Icons.notes,
+                                                    size: 20),
+                                                uncheckedColor:
+                                                Colors.white,
+                                                checkedColor:
+                                                Colors.white,
+                                                isChecked: true,
+                                                onTap: (selected) async {
+                                                  check();
+                                                  if (connected == true) {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder:
+                                                            (BuildContext
+                                                        context) {
+                                                          return AlertDialog(
+                                                            insetPadding:
+                                                            const EdgeInsets
+                                                                .all(
+                                                                10.0),
                                                             backgroundColor:
-                                                                Colors.black,
+                                                            Colors
+                                                                .white,
+                                                            title: Text(
+                                                              'Note: ',
+                                                              style: GoogleFonts
+                                                                  .robotoMono(
+                                                                textStyle: Theme.of(
+                                                                    context)
+                                                                    .textTheme
+                                                                    .headline4,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize:
+                                                                20.5.h,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .w900,
+                                                                fontStyle:
+                                                                FontStyle
+                                                                    .normal,
+                                                              ),
+                                                            ),
+                                                            content:
+                                                            Column(
+                                                              mainAxisSize:
+                                                              MainAxisSize
+                                                                  .min,
+                                                              crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                              children: <
+                                                                  Widget>[
+                                                                Flexible(
+                                                                  child: SizedBox(
+                                                                      child: RichText(
+                                                                          textAlign: TextAlign.justify,
+                                                                          text: TextSpan(children: [
+                                                                            TextSpan(
+                                                                                text: snapshot.data!['groceryitems'][i]['note'],
+                                                                                style: GoogleFonts.robotoMono(
+                                                                                  textStyle: Theme.of(context).textTheme.headline4,
+                                                                                  color: Colors.black,
+                                                                                  fontSize: 13.h,
+                                                                                  fontWeight: FontWeight.w600,
+                                                                                  fontStyle: FontStyle.normal,
+                                                                                )),
+                                                                          ]))),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            actions: <
+                                                                Widget>[
+                                                              MaterialButton(
+                                                                onPressed:
+                                                                    () {
+                                                                  Navigator.of(context)
+                                                                      .pop();
+                                                                },
+                                                                child:
+                                                                Text(
+                                                                  'Done',
+                                                                  style: GoogleFonts
+                                                                      .robotoMono(
+                                                                    textStyle: Theme.of(context)
+                                                                        .textTheme
+                                                                        .headline4,
+                                                                    color:
+                                                                    Colors.redAccent,
+                                                                    fontSize:
+                                                                    15,
+                                                                    fontWeight:
+                                                                    FontWeight.w700,
+                                                                    fontStyle:
+                                                                    FontStyle.normal,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           );
-                                                        }
-                                                      },
-                                                      border: Border.all(
-                                                        width: 1.h,
-                                                        color: Colors.black,
-                                                      ),
-                                                      size: 45,
-                                                    ),
-                                                  )
+                                                        });
+                                                  } else if (connected ==
+                                                      false) {
+                                                    Fluttertoast
+                                                        .showToast(
+                                                      msg:
+                                                      'Network Error',
+                                                      toastLength: Toast
+                                                          .LENGTH_SHORT,
+                                                      gravity:
+                                                      ToastGravity
+                                                          .TOP_RIGHT,
+                                                      timeInSecForIosWeb:
+                                                      2,
+                                                      textColor:
+                                                      Colors.red,
+                                                      backgroundColor:
+                                                      Colors.black,
+                                                    );
+                                                  }
+                                                },
+                                                border: Border.all(
+                                                  width: 1.h,
+                                                  color: Colors.black,
+                                                ),
+                                                size: 45,
+                                              ),
+                                            )
                                                 : Container(),
                                           ],
                                         ));
@@ -752,46 +670,46 @@ class _NotesListState extends State<NotesList> {
                           builder: (context,
                               AsyncSnapshot<DocumentSnapshot> snapshot) {
                             if (snapshot.hasData) {
-                              return snapshot.data!['notelistitems'].length == 0
+                              return snapshot.data!['groceryitems'].length == 0
                                   ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Column(
-                                          children: [
-                                            Container(
-                                                width: double.infinity,
-                                                alignment: Alignment.center,
-                                                margin:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 10, 0, 0),
-                                                child: RichText(
-                                                    textAlign: TextAlign.center,
-                                                    text: TextSpan(children: [
-                                                      TextSpan(
-                                                          text:
-                                                              'Oh oh! Looks like there is nothing in the list. '
-                                                              'Try to add one by'
-                                                              '\npressing the "+" button',
-                                                          style: GoogleFonts
-                                                              .robotoMono(
-                                                            textStyle: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .headline4,
-                                                            color: Colors
-                                                                .redAccent,
-                                                            fontSize: 15.h,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontStyle: FontStyle
-                                                                .normal,
-                                                          )),
-                                                    ]))),
-                                          ],
-                                        ),
-                                      ],
-                                    )
+                                crossAxisAlignment:
+                                CrossAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Container(
+                                          width: double.infinity,
+                                          alignment: Alignment.center,
+                                          margin:
+                                          const EdgeInsets.fromLTRB(
+                                              0, 10, 0, 0),
+                                          child: RichText(
+                                              textAlign: TextAlign.center,
+                                              text: TextSpan(children: [
+                                                TextSpan(
+                                                    text:
+                                                    'Oh oh! Looks like there is nothing in the list. '
+                                                        'Try to add one by'
+                                                        '\npressing the "+" button',
+                                                    style: GoogleFonts
+                                                        .robotoMono(
+                                                      textStyle: Theme.of(
+                                                          context)
+                                                          .textTheme
+                                                          .headline4,
+                                                      color: Colors
+                                                          .redAccent,
+                                                      fontSize: 15.h,
+                                                      fontWeight:
+                                                      FontWeight.w600,
+                                                      fontStyle: FontStyle
+                                                          .normal,
+                                                    )),
+                                              ]))),
+                                    ],
+                                  ),
+                                ],
+                              )
                                   : Container();
                             } else {
                               return Container();
@@ -834,7 +752,7 @@ class _NotesListState extends State<NotesList> {
                             CircularProgressIndicator(
                               backgroundColor: Colors.yellowAccent,
                               valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.black26),
+                              AlwaysStoppedAnimation<Color>(Colors.black26),
                             ),
                             SizedBox(
                               height: 30,
@@ -847,7 +765,7 @@ class _NotesListState extends State<NotesList> {
               Navigator.push(
                   context,
                   PageTransition(
-                      type: PageTransitionType.fade, child: AddNote()));
+                      type: PageTransitionType.fade, child: AddGroceryItems()));
             },
           ),
         ),
@@ -871,7 +789,7 @@ class _NotesListState extends State<NotesList> {
               ),
             ),
             CustomNavigationBarItem(
-              icon: const Icon(Icons.map_outlined),
+              icon: const Icon(Icons.list_alt_outlined),
               title: Text(
                 "To-Do",
                 style: GoogleFonts.robotoMono(
@@ -884,9 +802,9 @@ class _NotesListState extends State<NotesList> {
               ),
             ),
             CustomNavigationBarItem(
-              icon: const Icon(Icons.map_outlined),
+              icon: const Icon(Icons.medical_services_outlined),
               title: Text(
-                "Medicine",
+                "grocery",
                 style: GoogleFonts.robotoMono(
                   textStyle: Theme.of(context).textTheme.headline4,
                   color: Colors.white,
@@ -897,7 +815,7 @@ class _NotesListState extends State<NotesList> {
               ),
             ),
             CustomNavigationBarItem(
-              icon: const Icon(Icons.list_alt_outlined),
+              icon: const Icon(Icons.map_outlined),
               title: Text(
                 "Notes",
                 style: GoogleFonts.robotoMono(
@@ -910,9 +828,9 @@ class _NotesListState extends State<NotesList> {
               ),
             ),
             CustomNavigationBarItem(
-              icon: const Icon(Icons.map_outlined),
+              icon: const Icon(Icons.local_grocery_store),
               title: Text(
-                "Home",
+                "Grocery",
                 style: GoogleFonts.robotoMono(
                   textStyle: Theme.of(context).textTheme.headline4,
                   color: Colors.white,
@@ -923,7 +841,7 @@ class _NotesListState extends State<NotesList> {
               ),
             ),
           ],
-          currentIndex: 1,
+          currentIndex: 4,
           onTap: (index) {
             setState(() {
               _currentIndex = index;
@@ -941,7 +859,7 @@ class _NotesListState extends State<NotesList> {
               });
             }
             if (_currentIndex == 1) {
-                            Navigator.push(
+              Navigator.push(
                   context,
                   PageTransition(
                       type: PageTransitionType.fade, child: ToDoPage()));
@@ -953,25 +871,21 @@ class _NotesListState extends State<NotesList> {
               Navigator.push(
                   context,
                   PageTransition(
-                      type: PageTransitionType.fade, child: MedicinePage()));
+                      type: PageTransitionType.fade, child: GroceryItemPage()));
               setState(() {
                 _currentIndex = index;
               });
             }
             if (_currentIndex == 3) {
-              // Navigator.push(
-              //     context,
-              //     PageTransition(
-              //         type: PageTransitionType.fade, child: NotesList()));
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade, child: NotesList()));
               setState(() {
                 _currentIndex = index;
               });
             }
             if (_currentIndex == 4) {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.fade, child: HomePage()));
               setState(() {
                 _currentIndex = index;
               });

@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ctseproject/screens/kajathees/medicine_list_page.dart';
-import 'package:ctseproject/screens/sithpavan/todo_page.dart';
-import 'package:ctseproject/screens/upulka/notes_list.dart';
+import 'package:ctseproject/screens/medicine/medicine_list_page.dart';
+import 'package:ctseproject/screens/todo/todo_page.dart';
+import 'package:ctseproject/screens/lecture_note/notes_list.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +13,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:page_transition/page_transition.dart';
+
+import 'grocery_list/grocery_items_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -120,9 +122,9 @@ class _HomePageState extends State<HomePage> {
                                                                 .textTheme
                                                                 .headline4,
                                                             color: Colors.black,
-                                                            fontSize: 18.h,
+                                                            fontSize: 14.h,
                                                             fontWeight:
-                                                                FontWeight.w800,
+                                                                FontWeight.w900,
                                                             fontStyle: FontStyle
                                                                 .normal,
                                                           ),
@@ -137,9 +139,9 @@ class _HomePageState extends State<HomePage> {
                                                                 .textTheme
                                                                 .headline4,
                                                             color: Colors.black,
-                                                            fontSize: 18.h,
+                                                            fontSize: 14.h,
                                                             fontWeight:
-                                                                FontWeight.w800,
+                                                                FontWeight.w900,
                                                             fontStyle: FontStyle
                                                                 .normal,
                                                           ),
@@ -165,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                                                       color: Colors.black,
                                                       fontSize: 10.5.h,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                          FontWeight.w700,
                                                       fontStyle:
                                                           FontStyle.normal,
                                                     ),
@@ -192,7 +194,13 @@ class _HomePageState extends State<HomePage> {
                                           icon: const Icon(
                                               Icons.arrow_forward_outlined,
                                               size: 30.0),
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType.fade,
+                                                    child: ToDoPage()));
+                                          },
                                         ),
                                       )),
                                 ],
@@ -245,9 +253,9 @@ class _HomePageState extends State<HomePage> {
                                                                 .textTheme
                                                                 .headline4,
                                                             color: Colors.black,
-                                                            fontSize: 18.h,
+                                                            fontSize: 14.h,
                                                             fontWeight:
-                                                                FontWeight.w800,
+                                                                FontWeight.w900,
                                                             fontStyle: FontStyle
                                                                 .normal,
                                                           ),
@@ -262,9 +270,9 @@ class _HomePageState extends State<HomePage> {
                                                                 .textTheme
                                                                 .headline4,
                                                             color: Colors.black,
-                                                            fontSize: 18.h,
+                                                            fontSize: 14.h,
                                                             fontWeight:
-                                                                FontWeight.w800,
+                                                                FontWeight.w900,
                                                             fontStyle: FontStyle
                                                                 .normal,
                                                           ),
@@ -281,7 +289,7 @@ class _HomePageState extends State<HomePage> {
                                                 text: TextSpan(children: [
                                                   TextSpan(
                                                     text:
-                                                        'take care of your health!',
+                                                        'Take care of your health!',
                                                     style:
                                                         GoogleFonts.robotoMono(
                                                       textStyle:
@@ -291,7 +299,7 @@ class _HomePageState extends State<HomePage> {
                                                       color: Colors.black,
                                                       fontSize: 10.5.h,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                          FontWeight.w700,
                                                       fontStyle:
                                                           FontStyle.normal,
                                                     ),
@@ -317,7 +325,255 @@ class _HomePageState extends State<HomePage> {
                                           icon: const Icon(
                                               Icons.arrow_forward_outlined,
                                               size: 30.0),
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType.fade,
+                                                    child: MedicinePage()));
+                                          },
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      Container(
+                        width: double.infinity,
+                        height: 90.h,
+                        decoration: BoxDecoration(
+                            color: Colors.blue.shade200,
+                            borderRadius: BorderRadius.circular(0),
+                            border:
+                            Border.all(color: Colors.black, width: 2.0)),
+                        child: Column(
+                          children: [
+                            Flexible(
+                              child: Stack(
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            type: PageTransitionType.fade,
+                                            child: NotesList())),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            alignment: Alignment.topLeft,
+                                            margin: EdgeInsets.only(
+                                                top: 10.h,
+                                                left: 15.h,
+                                                right: 15.h),
+                                            child: RichText(
+                                                textAlign: TextAlign.left,
+                                                text: TextSpan(children: [
+                                                  TextSpan(
+                                                    text:
+                                                    'Check out your\nlecture notes!',
+                                                    style: GoogleFonts
+                                                        .robotoMono(
+                                                      textStyle: Theme.of(
+                                                          context)
+                                                          .textTheme
+                                                          .headline4,
+                                                      color: Colors.black,
+                                                      fontSize: 14.h,
+                                                      fontWeight:
+                                                      FontWeight.w900,
+                                                      fontStyle: FontStyle
+                                                          .normal,
+                                                    ),
+                                                  )
+                                                ]))),
+                                        Container(
+                                            alignment: Alignment.topLeft,
+                                            margin: EdgeInsets.only(
+                                                top: 5.h,
+                                                left: 15.h,
+                                                right: 15.h),
+                                            child: RichText(
+                                                textAlign: TextAlign.left,
+                                                text: TextSpan(children: [
+                                                  TextSpan(
+                                                    text:
+                                                    'Happy Learning!!',
+                                                    style:
+                                                    GoogleFonts.robotoMono(
+                                                      textStyle:
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .headline4,
+                                                      color: Colors.black,
+                                                      fontSize: 10.5.h,
+                                                      fontWeight:
+                                                      FontWeight.w700,
+                                                      fontStyle:
+                                                      FontStyle.normal,
+                                                    ),
+                                                  ),
+                                                ]))),
+                                      ],
+                                    ),
+                                  ),
+                                  Positioned(
+                                      left: 225.0.w,
+                                      top: -10.0.w,
+                                      child: Container(
+                                        width: 120.0.w,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.black, width: 2.h),
+                                          color: Colors.yellow.shade400,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.elliptical(90.h, 90.h)),
+                                        ),
+                                        child: IconButton(
+                                          iconSize: 90.0.h,
+                                          icon: const Icon(
+                                              Icons.arrow_forward_outlined,
+                                              size: 30.0),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType.fade,
+                                                    child: NotesList()));
+                                          },
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      Container(
+                        width: double.infinity,
+                        height: 90.h,
+                        decoration: BoxDecoration(
+                            color: Colors.deepOrangeAccent.shade100,
+                            borderRadius: BorderRadius.circular(0),
+                            border:
+                            Border.all(color: Colors.black, width: 2.0)),
+                        child: Column(
+                          children: [
+                            Flexible(
+                              child: Stack(
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            type: PageTransitionType.fade,
+                                            child: GroceryItemPage())),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            alignment: Alignment.topLeft,
+                                            margin: EdgeInsets.only(
+                                                top: 10.h,
+                                                left: 15.h,
+                                                right: 15.h),
+                                            child: RichText(
+                                                textAlign: TextAlign.left,
+                                                text: TextSpan(children: [
+                                                  storage.getItem(
+                                                      ('groceryItemCount')) ==
+                                                      1
+                                                      ? TextSpan(
+                                                    text:
+                                                    'Today you have \n${storage.getItem(('groceryItemCount'))} grocery list',
+                                                    style: GoogleFonts
+                                                        .robotoMono(
+                                                      textStyle: Theme.of(
+                                                          context)
+                                                          .textTheme
+                                                          .headline4,
+                                                      color: Colors.black,
+                                                      fontSize: 14.h,
+                                                      fontWeight:
+                                                      FontWeight.w900,
+                                                      fontStyle: FontStyle
+                                                          .normal,
+                                                    ),
+                                                  )
+                                                      : TextSpan(
+                                                    text:
+                                                    'Check out your grocey list',
+                                                    style: GoogleFonts
+                                                        .robotoMono(
+                                                      textStyle: Theme.of(
+                                                          context)
+                                                          .textTheme
+                                                          .headline4,
+                                                      color: Colors.black,
+                                                      fontSize: 14.h,
+                                                      fontWeight:
+                                                      FontWeight.w900,
+                                                      fontStyle: FontStyle
+                                                          .normal,
+                                                    ),
+                                                  )
+                                                ]))),
+                                        Container(
+                                            alignment: Alignment.topLeft,
+                                            margin: EdgeInsets.only(
+                                                top: 5.h,
+                                                left: 15.h,
+                                                right: 15.h),
+                                            child: RichText(
+                                                textAlign: TextAlign.left,
+                                                text: TextSpan(children: [
+                                                  TextSpan(
+                                                    text:
+                                                    'Happy Shopping!!!',
+                                                    style:
+                                                    GoogleFonts.robotoMono(
+                                                      textStyle:
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .headline4,
+                                                      color: Colors.black,
+                                                      fontSize: 10.5.h,
+                                                      fontWeight:
+                                                      FontWeight.w700,
+                                                      fontStyle:
+                                                      FontStyle.normal,
+                                                    ),
+                                                  ),
+                                                ]))),
+                                      ],
+                                    ),
+                                  ),
+                                  Positioned(
+                                      left: 225.0.w,
+                                      top: -10.0.w,
+                                      child: Container(
+                                        width: 120.0.w,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.black, width: 2.h),
+                                          color: Colors.indigoAccent.shade100,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.elliptical(90.h, 90.h)),
+                                        ),
+                                        child: IconButton(
+                                          iconSize: 90.0.h,
+                                          icon: const Icon(
+                                              Icons.arrow_forward_outlined,
+                                              size: 30.0),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType.fade,
+                                                    child: GroceryItemPage()));
+                                          },
                                         ),
                                       )),
                                 ],
@@ -366,7 +622,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             CustomNavigationBarItem(
-              icon: const Icon(Icons.map_outlined),
+              icon: const Icon(Icons.medical_services_outlined),
               title: Text(
                 "Medicine",
                 style: GoogleFonts.robotoMono(
@@ -392,9 +648,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             CustomNavigationBarItem(
-              icon: const Icon(Icons.map_outlined),
+              icon: const Icon(Icons.local_grocery_store),
               title: Text(
-                "Home",
+                "Grocery",
                 style: GoogleFonts.robotoMono(
                   textStyle: Theme.of(context).textTheme.headline4,
                   color: Colors.white,
@@ -449,7 +705,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                   context,
                   PageTransition(
-                      type: PageTransitionType.fade, child: HomePage()));
+                      type: PageTransitionType.fade, child: GroceryItemPage()));
               setState(() {
                 _currentIndex = index;
               });

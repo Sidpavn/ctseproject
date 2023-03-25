@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:ctseproject/screens/kajathees/medicine_list_page.dart';
+import 'package:ctseproject/screens/grocery_list/grocery_items_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,18 +10,18 @@ import 'package:intl/intl.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:page_transition/page_transition.dart';
 
-class EditMedicinePage extends StatefulWidget {
+class EditGroceryItemPage extends StatefulWidget {
   @override
-  _EditMedicinePageState createState() => _EditMedicinePageState();
+  _EditGroceryItemPageState createState() => _EditGroceryItemPageState();
 }
 
-class _EditMedicinePageState extends State<EditMedicinePage> {
+class _EditGroceryItemPageState extends State<EditGroceryItemPage> {
   late String name;
   late bool connected;
   String colorValue = '';
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final CollectionReference userDataCollection =
-      FirebaseFirestore.instance.collection("Users");
+  FirebaseFirestore.instance.collection("Users");
   final LocalStorage storage = LocalStorage('ReminderApp');
   final TextEditingController titleController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
@@ -37,11 +37,9 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
     super.initState();
     connected = false;
     check();
-    _selectedDate = storage.getItem('medicine_date');
-    _selectedTime = storage.getItem('medicine_time');
-    titleController.text = storage.getItem('medicine_name');
-    noteController.text = storage.getItem('medicine_note');
-    _selectedName = storage.getItem('medicine_name');
+    titleController.text = storage.getItem('grocery_name');
+    noteController.text = storage.getItem('grocery_note');
+    _selectedName = storage.getItem('grocery_name');
   }
 
   Future<void> check() async {
@@ -82,8 +80,8 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                 context,
                                 PageTransition(
                                     type: PageTransitionType.fade,
-                                    child: MedicinePage()),
-                                (route) => false);
+                                    child: GroceryItemPage()),
+                                    (route) => false);
                           },
                           child: Row(
                             children: [
@@ -93,7 +91,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                 'Go Back',
                                 style: GoogleFonts.robotoMono(
                                   textStyle:
-                                      Theme.of(context).textTheme.headline4,
+                                  Theme.of(context).textTheme.headline4,
                                   color: Colors.black,
                                   fontSize: 15.h,
                                   fontWeight: FontWeight.w700,
@@ -104,7 +102,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                           ),
                         ),
                         Text(
-                          'Edit Medicine Item',
+                          'Edit grocery Item',
                           style: GoogleFonts.robotoMono(
                             textStyle: Theme.of(context).textTheme.headline4,
                             color: Colors.black,
@@ -134,12 +132,12 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                               children: [
                                 Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                   child: Text(
                                     '$_selectedName',
                                     style: GoogleFonts.robotoMono(
                                       textStyle:
-                                          Theme.of(context).textTheme.headline4,
+                                      Theme.of(context).textTheme.headline4,
                                       color: Colors.black,
                                       fontSize: 14.h,
                                       fontWeight: FontWeight.w700,
@@ -157,9 +155,9 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         insetPadding:
-                                            const EdgeInsets.all(10.0),
+                                        const EdgeInsets.all(10.0),
                                         backgroundColor: Colors.white,
-                                        title: Text('Edit Medicine',
+                                        title: Text('Edit grocery',
                                             style: GoogleFonts.robotoMono(
                                               textStyle: Theme.of(context)
                                                   .textTheme
@@ -172,7 +170,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                         content: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: <Widget>[
                                             TextFormField(
                                               style: GoogleFonts.robotoMono(
@@ -185,13 +183,18 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                 fontStyle: FontStyle.normal,
                                               ),
                                               controller: titleController,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _selectedName = value;
+                                                });
+                                              },
                                               keyboardType: TextInputType.text,
                                               maxLength: 210,
                                               maxLines: 7,
                                               decoration: InputDecoration(
                                                   alignLabelWithHint: true,
                                                   counterStyle:
-                                                      GoogleFonts.robotoMono(
+                                                  GoogleFonts.robotoMono(
                                                     textStyle: Theme.of(context)
                                                         .textTheme
                                                         .headline4,
@@ -201,7 +204,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                     fontStyle: FontStyle.normal,
                                                   ),
                                                   labelStyle:
-                                                      GoogleFonts.robotoMono(
+                                                  GoogleFonts.robotoMono(
                                                     textStyle: Theme.of(context)
                                                         .textTheme
                                                         .headline4,
@@ -211,7 +214,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                     fontStyle: FontStyle.normal,
                                                   ),
                                                   errorStyle:
-                                                      GoogleFonts.robotoMono(
+                                                  GoogleFonts.robotoMono(
                                                     textStyle: Theme.of(context)
                                                         .textTheme
                                                         .headline4,
@@ -238,7 +241,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                               Navigator.of(context).pop();
                                             },
                                             child: Text(
-                                              'Close',
+                                              'Done',
                                               style: GoogleFonts.robotoMono(
                                                 textStyle: Theme.of(context)
                                                     .textTheme
@@ -283,13 +286,13 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                               children: [
                                 Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                   child: Text(
                                     'Add additional note to item: '
-                                    '\n(Optional)',
+                                        '\n(Optional)',
                                     style: GoogleFonts.robotoMono(
                                       textStyle:
-                                          Theme.of(context).textTheme.headline4,
+                                      Theme.of(context).textTheme.headline4,
                                       color: Colors.black,
                                       fontSize: 14.h,
                                       fontWeight: FontWeight.w700,
@@ -309,7 +312,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                         onWillPop: () async => false,
                                         child: AlertDialog(
                                           insetPadding:
-                                              const EdgeInsets.all(10.0),
+                                          const EdgeInsets.all(10.0),
                                           backgroundColor: Colors.white,
                                           title: Text('Add additional note',
                                               style: GoogleFonts.robotoMono(
@@ -324,10 +327,10 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                           content: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Text(
-                                                  'You can view it by pressing the "i" icon on the medicine item.',
+                                                  'You can view it by pressing the "i" icon on the grocery item.',
                                                   style: GoogleFonts.robotoMono(
                                                     textStyle: Theme.of(context)
                                                         .textTheme
@@ -350,49 +353,49 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                 ),
                                                 controller: noteController,
                                                 keyboardType:
-                                                    TextInputType.text,
+                                                TextInputType.text,
                                                 maxLength: 150,
                                                 maxLines: 5,
                                                 decoration: InputDecoration(
                                                     alignLabelWithHint: true,
                                                     counterStyle:
-                                                        GoogleFonts.robotoMono(
+                                                    GoogleFonts.robotoMono(
                                                       textStyle:
-                                                          Theme.of(context)
-                                                              .textTheme
-                                                              .headline4,
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .headline4,
                                                       color: Colors.black,
                                                       fontSize: 12.h,
                                                       fontWeight:
-                                                          FontWeight.w500,
+                                                      FontWeight.w500,
                                                       fontStyle:
-                                                          FontStyle.normal,
+                                                      FontStyle.normal,
                                                     ),
                                                     labelStyle:
-                                                        GoogleFonts.robotoMono(
+                                                    GoogleFonts.robotoMono(
                                                       textStyle:
-                                                          Theme.of(context)
-                                                              .textTheme
-                                                              .headline4,
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .headline4,
                                                       color: Colors.black,
                                                       fontSize: 14.h,
                                                       fontWeight:
-                                                          FontWeight.w500,
+                                                      FontWeight.w500,
                                                       fontStyle:
-                                                          FontStyle.normal,
+                                                      FontStyle.normal,
                                                     ),
                                                     errorStyle:
-                                                        GoogleFonts.robotoMono(
+                                                    GoogleFonts.robotoMono(
                                                       textStyle:
-                                                          Theme.of(context)
-                                                              .textTheme
-                                                              .headline4,
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .headline4,
                                                       color: Colors.red,
                                                       fontSize: 12.h,
                                                       fontWeight:
-                                                          FontWeight.w500,
+                                                      FontWeight.w500,
                                                       fontStyle:
-                                                          FontStyle.normal,
+                                                      FontStyle.normal,
                                                     ),
                                                     fillColor: Colors.grey
                                                         .withOpacity(0.3),
@@ -406,7 +409,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                 Navigator.of(context).pop();
                                               },
                                               child: Text(
-                                                'Close',
+                                                'Done',
                                                 style: GoogleFonts.robotoMono(
                                                   textStyle: Theme.of(context)
                                                       .textTheme
@@ -439,144 +442,15 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                           thickness: 1.h,
                           color: Colors.black,
                         ),
-                        Row(
-                          children: [
-                            Text('Date:',
-                                style: GoogleFonts.robotoMono(
-                                  textStyle:
-                                      Theme.of(context).textTheme.headline4,
-                                  color: Colors.black,
-                                  fontSize: 14.h,
-                                  fontWeight: FontWeight.w500,
-                                  fontStyle: FontStyle.normal,
-                                )),
-                            Container(
-                              width: 250.h,
-                              padding: const EdgeInsets.all(0),
-                              child: MaterialButton(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                color: Colors.white.withOpacity(0.6),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(0.0),
-                                    side: const BorderSide(
-                                        color: Colors.black, width: 1.0)),
-                                highlightElevation: 0,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 0, 0, 0),
-                                      child: _selectedDate == null
-                                          ? Text(
-                                              'Choose Date',
-                                              style: GoogleFonts.robotoMono(
-                                                textStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .headline4,
-                                                color: Colors.black,
-                                                fontSize: 15.h,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle: FontStyle.normal,
-                                              ),
-                                            )
-                                          : Text(
-                                              _selectedDate!,
-                                              style: GoogleFonts.robotoMono(
-                                                textStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .headline4,
-                                                color: Colors.black,
-                                                fontSize: 15.h,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle: FontStyle.normal,
-                                              ),
-                                            ),
-                                    ),
-                                  ],
-                                ),
-                                onPressed: () async {
-                                  _selectDate(context);
-                                },
-                              ),
-                            ),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        ),
-                        SizedBox(height: 5.h),
-                        Row(
-                          children: [
-                            Text('Time:',
-                                style: GoogleFonts.robotoMono(
-                                  textStyle:
-                                      Theme.of(context).textTheme.headline4,
-                                  color: Colors.black,
-                                  fontSize: 14.h,
-                                  fontWeight: FontWeight.w500,
-                                  fontStyle: FontStyle.normal,
-                                )),
-                            Container(
-                              width: 250.h,
-                              padding: const EdgeInsets.all(0),
-                              child: MaterialButton(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                color: Colors.white.withOpacity(0.6),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(0.0),
-                                    side: const BorderSide(
-                                        color: Colors.black, width: 1.0)),
-                                highlightElevation: 0,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 0, 0, 0),
-                                      child: _selectedTime == null
-                                          ? Text(
-                                              'Choose Time',
-                                              style: GoogleFonts.robotoMono(
-                                                textStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .headline4,
-                                                color: Colors.black,
-                                                fontSize: 15.h,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle: FontStyle.normal,
-                                              ),
-                                            )
-                                          : Text(
-                                              _selectedTime!,
-                                              style: GoogleFonts.robotoMono(
-                                                textStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .headline4,
-                                                color: Colors.black,
-                                                fontSize: 15.h,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle: FontStyle.normal,
-                                              ),
-                                            ),
-                                    ),
-                                  ],
-                                ),
-                                onPressed: () async {
-                                  _selectTime(context);
-                                },
-                              ),
-                            ),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        ),
                         SizedBox(height: 20.h),
                         Row(
                           children: [
                             Container(
-                              width: 150.h,
+                              width: 100.h,
                               padding: const EdgeInsets.all(0),
                               child: MaterialButton(
                                 padding:
-                                    const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                                const EdgeInsets.fromLTRB(10, 20, 10, 20),
                                 color: Colors.redAccent,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(0.0),
@@ -612,7 +486,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                               insetPadding:
-                                                  const EdgeInsets.all(10.0),
+                                              const EdgeInsets.all(10.0),
                                               backgroundColor: Colors.white,
                                               title: Text(
                                                   'Do you want to delete the item?',
@@ -628,62 +502,52 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                                 children: <Widget>[
                                                   SizedBox(height: 10.h),
                                                   Row(
                                                     children: [
                                                       Container(
-                                                        width: 140.h,
+                                                        width: 100.h,
                                                         padding:
-                                                            const EdgeInsets
-                                                                .all(0),
+                                                        const EdgeInsets
+                                                            .all(0),
                                                         child: MaterialButton(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .fromLTRB(
-                                                                  10,
-                                                                  20,
-                                                                  10,
-                                                                  20),
+                                                          padding: const EdgeInsets.fromLTRB(10,20,10,20),
+                                                          color: Colors.redAccent.shade100,
                                                           shape: RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          0.0),
-                                                              side: const BorderSide(
-                                                                  color: Colors
-                                                                      .red,
-                                                                  width: 2.0)),
+                                                              borderRadius: BorderRadius.circular(0.0),
+                                                              side: const BorderSide(color: Colors.black,width: 1.0)
+                                                          ),
                                                           highlightElevation: 0,
                                                           child: Row(
                                                             children: [
                                                               Container(
                                                                 padding:
-                                                                    const EdgeInsets
-                                                                            .fromLTRB(
-                                                                        10,
-                                                                        0,
-                                                                        0,
-                                                                        0),
+                                                                const EdgeInsets
+                                                                    .fromLTRB(
+                                                                    10,
+                                                                    0,
+                                                                    0,
+                                                                    0),
                                                                 child: Text(
                                                                   'No',
                                                                   style: GoogleFonts
                                                                       .robotoMono(
                                                                     textStyle: Theme.of(
-                                                                            context)
+                                                                        context)
                                                                         .textTheme
                                                                         .headline4,
                                                                     color: Colors
                                                                         .black,
                                                                     fontSize:
-                                                                        15.h,
+                                                                    15.h,
                                                                     fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
+                                                                    FontWeight
+                                                                        .w700,
                                                                     fontStyle:
-                                                                        FontStyle
-                                                                            .normal,
+                                                                    FontStyle
+                                                                        .normal,
                                                                   ),
                                                                 ),
                                                               ),
@@ -700,76 +564,65 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                               Fluttertoast
                                                                   .showToast(
                                                                 msg:
-                                                                    'Network Error',
+                                                                'Network Error',
                                                                 toastLength: Toast
                                                                     .LENGTH_SHORT,
                                                                 gravity:
-                                                                    ToastGravity
-                                                                        .TOP_RIGHT,
+                                                                ToastGravity
+                                                                    .TOP_RIGHT,
                                                                 timeInSecForIosWeb:
-                                                                    2,
+                                                                2,
                                                                 textColor:
-                                                                    Colors.red,
+                                                                Colors.red,
                                                                 backgroundColor:
-                                                                    Colors
-                                                                        .black,
+                                                                Colors
+                                                                    .black,
                                                               );
                                                             }
                                                           },
                                                         ),
                                                       ),
                                                       Container(
-                                                        width: 140.h,
+                                                        width: 100.h,
                                                         padding:
-                                                            const EdgeInsets
-                                                                .all(0),
+                                                        const EdgeInsets
+                                                            .all(0),
                                                         child: MaterialButton(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .fromLTRB(
-                                                                  10,
-                                                                  20,
-                                                                  10,
-                                                                  20),
-                                                          color: Colors.red,
+                                                          padding: const EdgeInsets.fromLTRB(10,20,10,20),
+                                                          color: Colors.lightBlueAccent.shade100,
                                                           shape: RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          0.0),
-                                                              side: const BorderSide(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  width: 1.0)),
+                                                              borderRadius: BorderRadius.circular(0.0),
+                                                              side: const BorderSide(color: Colors.black,width: 1.0)
+                                                          ),
                                                           highlightElevation: 0,
                                                           child: Row(
                                                             children: [
                                                               Container(
                                                                 padding:
-                                                                    const EdgeInsets
-                                                                            .fromLTRB(
-                                                                        10,
-                                                                        0,
-                                                                        0,
-                                                                        0),
+                                                                const EdgeInsets
+                                                                    .fromLTRB(
+                                                                    10,
+                                                                    0,
+                                                                    0,
+                                                                    0),
                                                                 child: Text(
                                                                   'Yes',
                                                                   style: GoogleFonts
                                                                       .robotoMono(
                                                                     textStyle: Theme.of(
-                                                                            context)
+                                                                        context)
                                                                         .textTheme
                                                                         .headline4,
                                                                     color: Colors
                                                                         .black,
                                                                     fontSize:
-                                                                        15.h,
+                                                                    15.h,
                                                                     fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
+                                                                    FontWeight
+                                                                        .w700,
                                                                     fontStyle:
-                                                                        FontStyle
-                                                                            .normal,
+                                                                    FontStyle
+                                                                        .normal,
                                                                   ),
                                                                 ),
                                                               ),
@@ -781,24 +634,24 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                                 true) {
                                                               showDialog(
                                                                   context:
-                                                                      context,
+                                                                  context,
                                                                   barrierDismissible:
-                                                                      false,
+                                                                  false,
                                                                   builder:
                                                                       (BuildContext
-                                                                          context) {
+                                                                  context) {
                                                                     return WillPopScope(
                                                                       onWillPop:
                                                                           () async =>
-                                                                              false,
+                                                                      false,
                                                                       child:
-                                                                          AlertDialog(
+                                                                      AlertDialog(
                                                                         backgroundColor:
-                                                                            Colors.white,
+                                                                        Colors.white,
                                                                         content:
-                                                                            Column(
+                                                                        Column(
                                                                           mainAxisSize:
-                                                                              MainAxisSize.min,
+                                                                          MainAxisSize.min,
                                                                           children: const <
                                                                               Widget>[
                                                                             SizedBox(
@@ -818,73 +671,73 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                                   });
                                                               await userDataCollection
                                                                   .doc(
-                                                                      'ctse_user_001')
+                                                                  'ctse_user_001')
                                                                   .get()
                                                                   .then((ds) =>
-                                                                      oldItemContent =
-                                                                          ds['medicineitems']);
+                                                              oldItemContent =
+                                                              ds['groceryitems']);
                                                               oldItemContent
                                                                   .removeAt(storage
-                                                                      .getItem(
-                                                                          'medicine_item_id'));
+                                                                  .getItem(
+                                                                  'grocery_item_id'));
                                                               itemContent.addAll(
                                                                   oldItemContent);
                                                               await userDataCollection
                                                                   .doc(
-                                                                      'ctse_user_001')
+                                                                  'ctse_user_001')
                                                                   .update({
-                                                                'medicineitems':
-                                                                    itemContent
+                                                                'groceryitems':
+                                                                itemContent
                                                               });
                                                               oldItemContent
                                                                   .clear();
                                                               itemContent
                                                                   .clear();
                                                               storage.deleteItem(
-                                                                  'medicine_item_id');
+                                                                  'grocery_item_id');
                                                               Navigator.push(
                                                                   context,
                                                                   PageTransition(
                                                                       type: PageTransitionType
                                                                           .fade,
                                                                       child:
-                                                                          MedicinePage()));
+                                                                      GroceryItemPage()));
                                                               Fluttertoast
                                                                   .showToast(
                                                                 msg:
-                                                                    'Medicine item delete.',
+                                                                'grocery item delete.',
                                                                 toastLength: Toast
                                                                     .LENGTH_SHORT,
                                                                 gravity:
-                                                                    ToastGravity
-                                                                        .TOP_RIGHT,
+                                                                ToastGravity
+                                                                    .TOP_RIGHT,
                                                                 timeInSecForIosWeb:
-                                                                    2,
+                                                                2,
                                                                 textColor:
-                                                                    Colors
-                                                                        .black,
+                                                                Colors
+                                                                    .black,
                                                                 backgroundColor:
-                                                                    Colors
-                                                                        .lightBlueAccent,
+                                                                Colors
+                                                                    .lightBlueAccent,
                                                               );
                                                             } else if (connected ==
                                                                 false) {
                                                               Fluttertoast
                                                                   .showToast(
                                                                 msg:
-                                                                    'Network Error',
+                                                                'Network Error',
                                                                 toastLength: Toast
                                                                     .LENGTH_SHORT,
                                                                 gravity:
-                                                                    ToastGravity
-                                                                        .TOP_RIGHT,
+                                                                ToastGravity
+                                                                    .TOP_RIGHT,
                                                                 timeInSecForIosWeb:
-                                                                    2,
+                                                                2,
                                                                 textColor:
-                                                                    Colors.red,
+                                                                Colors.red,
                                                                 backgroundColor:
-                                                                    Colors
-                                                                        .black,
+                                                                Colors
+                                                                    .black,
                                                               );
                                                             }
                                                           },
@@ -892,8 +745,8 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                       ),
                                                     ],
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                   )
                                                 ],
                                               ));
@@ -912,11 +765,11 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                               ),
                             ),
                             Container(
-                              width: 150.h,
+                              width: 100.h,
                               padding: const EdgeInsets.all(0),
                               child: MaterialButton(
                                 padding:
-                                    const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                                const EdgeInsets.fromLTRB(10, 20, 10, 20),
                                 color: Colors.amberAccent,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(0.0),
@@ -946,9 +799,7 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                 onPressed: () async {
                                   check();
                                   if (connected == true) {
-                                    if (_selectedDate == null ||
-                                        _selectedTime == null ||
-                                        titleController.text.trim() == '') {
+                                    if (titleController.text.trim() == '') {
                                       Fluttertoast.showToast(
                                         msg: 'Fill the required fields',
                                         toastLength: Toast.LENGTH_SHORT,
@@ -960,8 +811,8 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                     } else {
                                       debugPrint('pressed');
                                       debugPrint(
-                                          '${storage.getItem('medicineItemCount')} $_selectedDate '
-                                          '$_selectedTime ${titleController.text.trim()}');
+                                          '${storage.getItem('groceryItemCount')} $_selectedDate '
+                                              '$_selectedTime ${titleController.text.trim()}');
                                       showDialog(
                                           context: context,
                                           barrierDismissible: false,
@@ -972,18 +823,18 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                                 backgroundColor: Colors.white,
                                                 content: Column(
                                                   mainAxisSize:
-                                                      MainAxisSize.min,
+                                                  MainAxisSize.min,
                                                   children: const <Widget>[
                                                     SizedBox(
                                                       height: 30,
                                                     ),
                                                     CircularProgressIndicator(
                                                       backgroundColor:
-                                                          Colors.green,
+                                                      Colors.green,
                                                       valueColor:
-                                                          AlwaysStoppedAnimation<
-                                                                  Color>(
-                                                              Colors.black26),
+                                                      AlwaysStoppedAnimation<
+                                                          Color>(
+                                                          Colors.black26),
                                                     ),
                                                     SizedBox(
                                                       height: 30,
@@ -997,34 +848,32 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                                           .doc('ctse_user_001')
                                           .get()
                                           .then((ds) => oldItemContent =
-                                              ds['medicineitems']);
+                                      ds['groceryitems']);
                                       oldItemContent.removeAt(
-                                          storage.getItem('medicine_item_id'));
+                                          storage.getItem('grocery_item_id'));
                                       itemContent.add({
-                                        "date": _selectedDate,
-                                        "time": _selectedTime,
                                         "item_name":
-                                            titleController.text.trim(),
+                                        titleController.text.trim(),
                                         "checked": storage
-                                            .getItem('medicine_checked_status'),
+                                            .getItem('grocery_checked_status'),
                                         "note": noteController.text.trim(),
                                       });
                                       oldItemContent.addAll(itemContent);
                                       await userDataCollection
                                           .doc('ctse_user_001')
                                           .update({
-                                        'medicineitems': oldItemContent
+                                        'groceryitems': oldItemContent
                                       });
                                       oldItemContent.clear();
                                       itemContent.clear();
-                                      storage.deleteItem('medicine_item_id');
+                                      storage.deleteItem('grocery_item_id');
                                       Navigator.push(
                                           context,
                                           PageTransition(
                                               type: PageTransitionType.fade,
-                                              child: MedicinePage()));
+                                              child: GroceryItemPage()));
                                       Fluttertoast.showToast(
-                                        msg: 'Medicine item updated.',
+                                        msg: 'grocery item updated.',
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.TOP_RIGHT,
                                         timeInSecForIosWeb: 2,
@@ -1055,39 +904,6 @@ class _EditMedicinePageState extends State<EditMedicinePage> {
                 ),
               ),
             )));
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2050));
-    if (pickedDate != null) {
-      setState(() {
-        _selectedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
-      });
-    } else if (pickedDate == null) {
-      setState(() {
-        _selectedDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
-      });
-    }
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (pickedTime != null) {
-      setState(() {
-        _selectedTime = pickedTime.format(context);
-      });
-    } else if (pickedTime == null) {
-      setState(() {
-        _selectedTime = TimeOfDay.now().format(context);
-      });
-    }
   }
 
   fetchUsername() async {

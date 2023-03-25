@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:ctseproject/screens/kajathees/medicine_list_page.dart';
+import 'package:ctseproject/screens/medicine/medicine_list_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -238,7 +238,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                                               Navigator.of(context).pop();
                                             },
                                             child: Text(
-                                              'Close',
+                                              'Done',
                                               style: GoogleFonts.robotoMono(
                                                 textStyle: Theme.of(context)
                                                     .textTheme
@@ -350,49 +350,44 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                                                 ),
                                                 controller: noteController,
                                                 keyboardType:
-                                                    TextInputType.text,
+                                                TextInputType.text,
                                                 maxLength: 150,
                                                 maxLines: 5,
                                                 decoration: InputDecoration(
                                                     alignLabelWithHint: true,
                                                     counterStyle:
-                                                        GoogleFonts.robotoMono(
-                                                      textStyle:
-                                                          Theme.of(context)
-                                                              .textTheme
-                                                              .headline4,
+                                                    GoogleFonts.robotoMono(
+                                                      textStyle: Theme.of(context).textTheme.headline4,
                                                       color: Colors.black,
                                                       fontSize: 12.h,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontStyle:
-                                                          FontStyle.normal,
+                                                      fontWeight: FontWeight.w500,
+                                                      fontStyle: FontStyle.normal,
                                                     ),
                                                     labelStyle:
-                                                        GoogleFonts.robotoMono(
+                                                    GoogleFonts.robotoMono(
                                                       textStyle:
-                                                          Theme.of(context)
-                                                              .textTheme
-                                                              .headline4,
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .headline4,
                                                       color: Colors.black,
                                                       fontSize: 14.h,
                                                       fontWeight:
-                                                          FontWeight.w500,
+                                                      FontWeight.w500,
                                                       fontStyle:
-                                                          FontStyle.normal,
+                                                      FontStyle.normal,
                                                     ),
                                                     errorStyle:
-                                                        GoogleFonts.robotoMono(
+                                                    GoogleFonts.robotoMono(
                                                       textStyle:
-                                                          Theme.of(context)
-                                                              .textTheme
-                                                              .headline4,
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .headline4,
                                                       color: Colors.red,
                                                       fontSize: 12.h,
                                                       fontWeight:
-                                                          FontWeight.w500,
+                                                      FontWeight.w500,
                                                       fontStyle:
-                                                          FontStyle.normal,
+                                                      FontStyle.normal,
                                                     ),
                                                     fillColor: Colors.grey
                                                         .withOpacity(0.3),
@@ -406,7 +401,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                                                 Navigator.of(context).pop();
                                               },
                                               child: Text(
-                                                'Close',
+                                                'Done',
                                                 style: GoogleFonts.robotoMono(
                                                   textStyle: Theme.of(context)
                                                       .textTheme

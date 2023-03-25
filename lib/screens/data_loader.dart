@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctseproject/screens/homepage.dart';
-import 'package:ctseproject/screens/sithpavan/todo_page.dart';
+import 'package:ctseproject/screens/todo/todo_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

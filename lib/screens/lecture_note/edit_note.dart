@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:ctseproject/screens/sithpavan/todo_page.dart';
+import 'package:ctseproject/screens/lecture_note/notes_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,14 +11,14 @@ import 'package:page_transition/page_transition.dart';
 import 'package:intl/intl.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
-class EditToDoPage extends StatefulWidget {
+class EditNotePage extends StatefulWidget {
 
   @override
-  _EditToDoPageState createState() => _EditToDoPageState();
+  _EditNotePageState createState() => _EditNotePageState();
 
 }
 
-class _EditToDoPageState extends State<EditToDoPage> {
+class _EditNotePageState extends State<EditNotePage> {
 
   late String name;  late bool connected;  String colorValue = '';
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -36,9 +36,9 @@ class _EditToDoPageState extends State<EditToDoPage> {
     super.initState();
     connected = false;
     check();
-    _selectedDate = storage.getItem('todo_date');                     _selectedTime = storage.getItem('todo_time');
-    selectedColorValue = storage.getItem('todo_card_color_name');     selectedPriorityValue = storage.getItem('todo_priority');
-    titleController.text = storage.getItem('todo_item_name');         noteController.text = storage.getItem('todo_note');
+    _selectedDate = storage.getItem('note_date');                     _selectedTime = storage.getItem('note_time');
+    selectedColorValue = storage.getItem('note_card_color_name');     selectedPriorityValue = storage.getItem('note_priority');
+    titleController.text = storage.getItem('note_item_name');         noteController.text = storage.getItem('note_note');
   }
 
   Future<void> check() async {
@@ -77,7 +77,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                     MaterialButton(
                       padding: EdgeInsets.only(left: -10.h),
                       onPressed: () {
-                        Navigator.pushAndRemoveUntil(context, PageTransition(type: PageTransitionType.fade, child: ToDoPage()), (route) => false);
+                        Navigator.pushAndRemoveUntil(context, PageTransition(type: PageTransitionType.fade, child: NotesList()), (route) => false);
                       },
                       child: Row(
                         children: [
@@ -95,7 +95,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                         ],
                       ),
                     ),
-                    Text('Edit To-Do Item',
+                    Text('Edit the Lecture Note',
                       style: GoogleFonts.robotoMono(
                         textStyle: Theme.of(context).textTheme.headline4,
                         color: Colors.black,
@@ -198,95 +198,6 @@ class _EditToDoPageState extends State<EditToDoPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
                     SizedBox(height: 10.h),
-                    Row(
-                      children: [
-                        Text('Priority Level:',
-                            style: GoogleFonts.robotoMono(
-                              textStyle: Theme.of(context).textTheme.headline4,
-                              color: Colors.black,
-                              fontSize: 14.h,
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FontStyle.normal,
-                            )
-                        ),
-                        DropdownButton2(
-                          isExpanded: true,
-                          hint: Row(
-                            children: [
-                              Text(
-                                'Choose Priority',
-                                style: GoogleFonts.robotoMono(
-                                  textStyle: Theme.of(context).textTheme.headline4,
-                                  color: Colors.black,
-                                  fontSize: 14.h,
-                                  fontWeight: FontWeight.w500,
-                                  fontStyle: FontStyle.normal,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                          items: priorities.map((priority) => DropdownMenuItem<String>(
-                            value: priority,
-                            child: Text(
-                              priority,
-                              style: GoogleFonts.robotoMono(
-                                textStyle: Theme.of(context).textTheme.headline4,
-                                color: Colors.black,
-                                fontSize: 14.h,
-                                fontWeight: FontWeight.w500,
-                                fontStyle: FontStyle.normal,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          )).toList(),
-                          value: selectedPriorityValue,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedPriorityValue = value as String;
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.arrow_forward_ios_outlined,
-                          ),
-                          iconSize: 14.h,
-                          iconEnabledColor: Colors.black,
-                          iconDisabledColor: Colors.grey,
-                          buttonHeight: 50.h,
-                          buttonWidth: 180.h,
-                          buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-                          buttonDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(0.0),
-                            border: Border.all(
-                                color: Colors.black,
-                                width: 1.h
-                            ),
-                            color: Colors.white.withOpacity(0.6),
-                          ),
-                          buttonElevation: 1,
-                          itemHeight: 40.h,
-                          itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                          dropdownMaxHeight: 200.h,
-                          dropdownWidth: 180.h,
-                          dropdownPadding: null,
-                          dropdownDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(0.0),
-                            border: Border.all(
-                                color: Colors.black,
-                                width: 1.h
-                            ),
-                            color: Colors.white.withOpacity(0.9),
-                          ),
-                          dropdownElevation: 8,
-                          scrollbarRadius: const Radius.circular(0),
-                          scrollbarThickness: 2,
-                          scrollbarAlwaysShow: true,
-                          offset: const Offset(-10, 0),
-                        ),
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    ),
-                    SizedBox(height: 10.h),
                     Divider(
                       thickness: 1.h,
                       color: Colors.black,
@@ -308,7 +219,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                           children: [
                             Container(
                               padding: const EdgeInsets.fromLTRB( 10, 0, 0, 0),
-                              child: Text('Enter to-do item:',
+                              child: Text('Update Lecture Notes :',
                                 style:GoogleFonts.robotoMono(
                                   textStyle: Theme.of(context).textTheme.headline4,
                                   color: Colors.black,
@@ -327,7 +238,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                               return AlertDialog(
                                 insetPadding: const EdgeInsets.all(10.0),
                                 backgroundColor: Colors.white,
-                                title: Text('Enter to-do item',
+                                title: Text('Enter lecture notes',
                                     style:GoogleFonts.robotoMono(
                                       textStyle: Theme.of(context).textTheme.headline4,
                                       color: Colors.black,
@@ -376,7 +287,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: Text('Close',
+                                    child: Text('Done',
                                       style:GoogleFonts.robotoMono(
                                         textStyle: Theme.of(context).textTheme.headline4,
                                         color: Colors.redAccent,
@@ -419,8 +330,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                           children: [
                             Container(
                               padding: const EdgeInsets.fromLTRB( 10, 0, 0, 0),
-                              child: Text('Add additional note to item: '
-                                  '\n(Optional)',
+                              child: Text('Update the description :',
                                 style:GoogleFonts.robotoMono(
                                   textStyle: Theme.of(context).textTheme.headline4,
                                   color: Colors.black,
@@ -441,7 +351,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                                 child: AlertDialog(
                                   insetPadding: const EdgeInsets.all(10.0),
                                   backgroundColor: Colors.white,
-                                  title: Text('Add additional note',
+                                  title: Text('Update the description',
                                       style:GoogleFonts.robotoMono(
                                         textStyle: Theme.of(context).textTheme.headline4,
                                         color: Colors.black,
@@ -454,7 +364,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Text('You can view it by pressing the "i" icon on the todo item.',
+                                      Text('You can view it by pressing the "i" icon on the note.',
                                           style:GoogleFonts.robotoMono(
                                             textStyle: Theme.of(context).textTheme.headline4,
                                             color: Colors.black,
@@ -493,7 +403,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text('Close',
+                                      child: Text('Done',
                                         style:GoogleFonts.robotoMono(
                                           textStyle: Theme.of(context).textTheme.headline4,
                                           color: Colors.redAccent,
@@ -581,63 +491,8 @@ class _EditToDoPageState extends State<EditToDoPage> {
                     SizedBox(height: 5.h),
                     Row(
                       children: [
-                        Text('Time:',
-                            style: GoogleFonts.robotoMono(
-                              textStyle: Theme.of(context).textTheme.headline4,
-                              color: Colors.black,
-                              fontSize: 14.h,
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FontStyle.normal,
-                            )
-                        ),
                         Container(
-                          width: 250.h,
-                          padding: const EdgeInsets.all(0),
-                          child: MaterialButton(
-                            padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                            color: Colors.white.withOpacity(0.6),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0),
-                                side: const BorderSide(color: Colors.black,width: 1.0)
-                            ),
-                            highlightElevation: 0,
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.fromLTRB( 10, 0, 0, 0),
-                                  child: _selectedTime == null ? Text('Choose Time',
-                                    style:GoogleFonts.robotoMono(
-                                      textStyle: Theme.of(context).textTheme.headline4,
-                                      color: Colors.black,
-                                      fontSize: 15.h,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FontStyle.normal,
-                                    ),
-                                  ) :
-                                  Text(_selectedTime!,
-                                    style:GoogleFonts.robotoMono(
-                                      textStyle: Theme.of(context).textTheme.headline4,
-                                      color: Colors.black,
-                                      fontSize: 15.h,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FontStyle.normal,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            onPressed: () async {
-                              _selectTime(context);
-                            },
-                          ),
-                        ),                 ],
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    ),
-                    SizedBox(height: 20.h),
-                    Row(
-                      children: [
-                        Container(
-                          width: 150.h,
+                          width: 100.h,
                           padding: const EdgeInsets.all(0),
                           child: MaterialButton(
                             padding: const EdgeInsets.fromLTRB(10,20,10,20),
@@ -670,7 +525,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                                   return AlertDialog(
                                       insetPadding: const EdgeInsets.all(10.0),
                                       backgroundColor: Colors.white,
-                                      title: Text('Do you want to delete the item?',
+                                      title: Text('Do you want to delete the note?',
                                           style:GoogleFonts.robotoMono(
                                             textStyle: Theme.of(context).textTheme.headline4,
                                             color: Colors.black,
@@ -686,7 +541,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                                           Row(
                                             children: [
                                               Container(
-                                                width: 140.h,
+                                                width: 100.h,
                                                 padding: const EdgeInsets.all(0),
                                                 child: MaterialButton(
                                                   padding: const EdgeInsets.fromLTRB(10,20,10,20),
@@ -731,7 +586,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                                                 ),
                                               ),
                                               Container(
-                                                width: 140.h,
+                                                width: 100.h,
                                                 padding: const EdgeInsets.all(0),
                                                 child: MaterialButton(
                                                   padding: const EdgeInsets.fromLTRB(10,20,10,20),
@@ -783,16 +638,16 @@ class _EditToDoPageState extends State<EditToDoPage> {
                                                           ),
                                                         );
                                                       });
-                                                      await userDataCollection.doc('ctse_user_001').get().then((ds) => oldItemContent = ds['todolistitems']);
-                                                      oldItemContent.removeAt(storage.getItem('todo_item_id'));
+                                                      await userDataCollection.doc('ctse_user_001').get().then((ds) => oldItemContent = ds['notelistitems']);
+                                                      oldItemContent.removeAt(storage.getItem('note_item_id'));
                                                       itemContent.addAll(oldItemContent);
-                                                      await userDataCollection.doc('ctse_user_001').update({'todolistitems': itemContent });
+                                                      await userDataCollection.doc('ctse_user_001').update({'notelistitems': itemContent });
                                                       oldItemContent.clear();
                                                       itemContent.clear();
-                                                      storage.deleteItem('todo_item_id');
-                                                      Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: ToDoPage()));
+                                                      storage.deleteItem('note_item_id');
+                                                      Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: NotesList()));
                                                       Fluttertoast.showToast(
-                                                        msg: 'To do item delete.',
+                                                        msg: 'Note delete.',
                                                         toastLength: Toast.LENGTH_SHORT,
                                                         gravity: ToastGravity.TOP_RIGHT,
                                                         timeInSecForIosWeb: 2,
@@ -835,7 +690,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                           ),
                         ),
                         Container(
-                          width: 150.h,
+                          width: 100.h,
                           padding: const EdgeInsets.all(0),
                           child: MaterialButton(
                             padding: const EdgeInsets.fromLTRB(10,20,10,20),
@@ -864,7 +719,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                             onPressed: () async {
                               check();
                               if(connected == true){
-                                if(_selectedDate == null || selectedColorValue == null || selectedPriorityValue == null || _selectedTime == null
+                                if(_selectedDate == null || selectedColorValue == null 
                                     || titleController.text.trim() == ''){
                                   Fluttertoast.showToast(
                                     msg: 'Fill the required fields',
@@ -877,7 +732,7 @@ class _EditToDoPageState extends State<EditToDoPage> {
                                 }
                                 else {
                                   debugPrint('pressed');
-                                  debugPrint('${storage.getItem('todoItemCount')} $_selectedDate '
+                                  debugPrint('${storage.getItem('noteCount')} $_selectedDate '
                                       '$_selectedTime ${titleController.text.trim()} ${selectedColorValue?.toLowerCase()} $selectedPriorityValue');
                                   if(selectedColorValue == 'Green'){colorValue = '0xff4caf50';}
                                   if(selectedColorValue == 'Red'){colorValue = '0xffef9a9a';}
@@ -910,26 +765,23 @@ class _EditToDoPageState extends State<EditToDoPage> {
                                       ),
                                     );
                                   });
-                                  await userDataCollection.doc('ctse_user_001').get().then((ds) => oldItemContent = ds['todolistitems']);
-                                  oldItemContent.removeAt(storage.getItem('todo_item_id'));
+                                  await userDataCollection.doc('ctse_user_001').get().then((ds) => oldItemContent = ds['notelistitems']);
+                                  oldItemContent.removeAt(storage.getItem('note_item_id'));
                                   itemContent.add({
                                     "date" : _selectedDate,
-                                    "time" : _selectedTime,
                                     "item_name" : titleController.text.trim(),
                                     "card_color" : colorValue,
                                     "card_color_name" : selectedColorValue,
-                                    "priority" : selectedPriorityValue,
-                                    "checked" : storage.getItem('todo_checked_status'),
                                     "note" : noteController.text.trim(),
                                   });
                                   oldItemContent.addAll(itemContent);
-                                  await userDataCollection.doc('ctse_user_001').update({'todolistitems': oldItemContent });
+                                  await userDataCollection.doc('ctse_user_001').update({'notelistitems': oldItemContent });
                                   oldItemContent.clear();
                                   itemContent.clear();
-                                  storage.deleteItem('todo_item_id');
-                                  Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: ToDoPage()));
+                                  storage.deleteItem('note_item_id');
+                                  Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: NotesList()));
                                   Fluttertoast.showToast(
-                                    msg: 'To do item updated.',
+                                    msg: 'Note updated.',
                                     toastLength: Toast.LENGTH_SHORT,
                                     gravity: ToastGravity.TOP_RIGHT,
                                     timeInSecForIosWeb: 2,

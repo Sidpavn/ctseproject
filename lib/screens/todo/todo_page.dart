@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:ctseproject/screens/kajathees/medicine_list_page.dart';
-import 'package:ctseproject/screens/sithpavan/add_todo.dart';
+import 'package:ctseproject/screens/medicine/medicine_list_page.dart';
+import 'package:ctseproject/screens/todo/add_todo.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +16,10 @@ import 'package:localstorage/localstorage.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
 
+import '../grocery_list/grocery_items_page.dart';
 import '../homepage.dart';
+import '../medicine/medicine_list_page.dart';
+import '../lecture_note/notes_list.dart';
 import 'edit_todo.dart';
 
 class ToDoPage extends StatefulWidget {
@@ -151,7 +154,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                         Navigator.of(context).pop();
                                       },
                                       child: Text(
-                                        'Close',
+                                        'Done',
                                         style: GoogleFonts.robotoMono(
                                           textStyle: Theme.of(context)
                                               .textTheme
@@ -681,7 +684,7 @@ class _ToDoPageState extends State<ToDoPage> {
                                                                       },
                                                                       child:
                                                                           Text(
-                                                                        'Close',
+                                                                        'Done',
                                                                         style: GoogleFonts
                                                                             .robotoMono(
                                                                           textStyle: Theme.of(context)
@@ -897,7 +900,7 @@ class _ToDoPageState extends State<ToDoPage> {
               ),
             ),
             CustomNavigationBarItem(
-              icon: const Icon(Icons.map_outlined),
+              icon: const Icon(Icons.medical_services_outlined),
               title: Text(
                 "Medicine",
                 style: GoogleFonts.robotoMono(
@@ -923,9 +926,9 @@ class _ToDoPageState extends State<ToDoPage> {
               ),
             ),
             CustomNavigationBarItem(
-              icon: const Icon(Icons.map_outlined),
+              icon: const Icon(Icons.local_grocery_store),
               title: Text(
-                "Home",
+                "Grocery",
                 style: GoogleFonts.robotoMono(
                   textStyle: Theme.of(context).textTheme.headline4,
                   color: Colors.white,
@@ -971,7 +974,7 @@ class _ToDoPageState extends State<ToDoPage> {
               Navigator.push(
                   context,
                   PageTransition(
-                      type: PageTransitionType.fade, child: HomePage()));
+                      type: PageTransitionType.fade, child: NotesList()));
               setState(() {
                 _currentIndex = index;
               });
@@ -980,7 +983,7 @@ class _ToDoPageState extends State<ToDoPage> {
               Navigator.push(
                   context,
                   PageTransition(
-                      type: PageTransitionType.fade, child: HomePage()));
+                      type: PageTransitionType.fade, child: GroceryItemPage()));
               setState(() {
                 _currentIndex = index;
               });

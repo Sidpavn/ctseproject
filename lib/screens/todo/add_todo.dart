@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:ctseproject/screens/upulka/notes_list.dart';
+import 'package:ctseproject/screens/todo/todo_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,14 +11,14 @@ import 'package:page_transition/page_transition.dart';
 import 'package:intl/intl.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
-class AddNote extends StatefulWidget {
+class AddToDoPage extends StatefulWidget {
 
   @override
-  _AddNoteState createState() => _AddNoteState();
+  _AddToDoPageState createState() => _AddToDoPageState();
 
 }
 
-class _AddNoteState extends State<AddNote> {
+class _AddToDoPageState extends State<AddToDoPage> {
 
   late String name;  late bool connected;  String colorValue = '';
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -36,10 +36,10 @@ class _AddNoteState extends State<AddNote> {
     super.initState();
     connected = false;
     check();
-    debugPrint(storage.getItem('noteCount').toString());
-    if (storage.getItem('noteCount') == null) {
-      storage.setItem('noteCount', 0);
-      debugPrint('Note null');
+    debugPrint(storage.getItem('todoItemCount').toString());
+    if (storage.getItem('todoItemCount') == null) {
+      storage.setItem('todoItemCount', 0);
+      debugPrint('todo item null');
     }
   }
 
@@ -79,7 +79,7 @@ class _AddNoteState extends State<AddNote> {
                         MaterialButton(
                           padding: EdgeInsets.only(left: -10.h),
                           onPressed: () {
-                            Navigator.pushAndRemoveUntil(context, PageTransition(type: PageTransitionType.fade, child: NotesList()), (route) => false);
+                            Navigator.pushAndRemoveUntil(context, PageTransition(type: PageTransitionType.fade, child: ToDoPage()), (route) => false);
                           },
                           child: Row(
                             children: [
@@ -97,7 +97,7 @@ class _AddNoteState extends State<AddNote> {
                             ],
                           ),
                         ),
-                        Text('Add a Note here',
+                        Text('Add To-Do Item',
                           style: GoogleFonts.robotoMono(
                             textStyle: Theme.of(context).textTheme.headline4,
                             color: Colors.black,
@@ -200,7 +200,95 @@ class _AddNoteState extends State<AddNote> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         ),
                         SizedBox(height: 10.h),
-                        
+                        Row(
+                          children: [
+                            Text('Priority Level:',
+                                style: GoogleFonts.robotoMono(
+                                  textStyle: Theme.of(context).textTheme.headline4,
+                                  color: Colors.black,
+                                  fontSize: 14.h,
+                                  fontWeight: FontWeight.w500,
+                                  fontStyle: FontStyle.normal,
+                                )
+                            ),
+                            DropdownButton2(
+                              isExpanded: true,
+                              hint: Row(
+                                children: [
+                                  Text(
+                                    'Choose Priority',
+                                    style: GoogleFonts.robotoMono(
+                                      textStyle: Theme.of(context).textTheme.headline4,
+                                      color: Colors.black,
+                                      fontSize: 14.h,
+                                      fontWeight: FontWeight.w500,
+                                      fontStyle: FontStyle.normal,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                              items: priorities.map((priority) => DropdownMenuItem<String>(
+                                value: priority,
+                                child: Text(
+                                  priority,
+                                  style: GoogleFonts.robotoMono(
+                                    textStyle: Theme.of(context).textTheme.headline4,
+                                    color: Colors.black,
+                                    fontSize: 14.h,
+                                    fontWeight: FontWeight.w500,
+                                    fontStyle: FontStyle.normal,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              )).toList(),
+                              value: selectedPriorityValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedPriorityValue = value as String;
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.arrow_forward_ios_outlined,
+                              ),
+                              iconSize: 14.h,
+                              iconEnabledColor: Colors.black,
+                              iconDisabledColor: Colors.grey,
+                              buttonHeight: 50.h,
+                              buttonWidth: 180.h,
+                              buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+                              buttonDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(0.0),
+                                border: Border.all(
+                                    color: Colors.black,
+                                    width: 1.h
+                                ),
+                                color: Colors.white.withOpacity(0.6),
+                              ),
+                              buttonElevation: 1,
+                              itemHeight: 40.h,
+                              itemPadding: const EdgeInsets.only(left: 14, right: 14),
+                              dropdownMaxHeight: 200.h,
+                              dropdownWidth: 180.h,
+                              dropdownPadding: null,
+                              dropdownDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(0.0),
+                                border: Border.all(
+                                    color: Colors.black,
+                                    width: 1.h
+                                ),
+                                color: Colors.white.withOpacity(0.9),
+                              ),
+                              dropdownElevation: 8,
+                              scrollbarRadius: const Radius.circular(0),
+                              scrollbarThickness: 2,
+                              scrollbarAlwaysShow: true,
+                              offset: const Offset(-10, 0),
+                            ),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ),
+                        SizedBox(height: 10.h),
                         Divider(
                           thickness: 1.h,
                           color: Colors.black,
@@ -222,7 +310,7 @@ class _AddNoteState extends State<AddNote> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.fromLTRB( 10, 0, 0, 0),
-                                  child: Text('Enter the Title:',
+                                  child: Text('Enter to-do item:',
                                     style:GoogleFonts.robotoMono(
                                       textStyle: Theme.of(context).textTheme.headline4,
                                       color: Colors.black,
@@ -241,7 +329,7 @@ class _AddNoteState extends State<AddNote> {
                                   return AlertDialog(
                                     insetPadding: const EdgeInsets.all(10.0),
                                     backgroundColor: Colors.white,
-                                    title: Text('Enter the Title:',
+                                    title: Text('Enter to-do item',
                                         style:GoogleFonts.robotoMono(
                                           textStyle: Theme.of(context).textTheme.headline4,
                                           color: Colors.black,
@@ -290,7 +378,7 @@ class _AddNoteState extends State<AddNote> {
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
-                                        child: Text('Close',
+                                        child: Text('Done',
                                           style:GoogleFonts.robotoMono(
                                             textStyle: Theme.of(context).textTheme.headline4,
                                             color: Colors.redAccent,
@@ -333,7 +421,8 @@ class _AddNoteState extends State<AddNote> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.fromLTRB( 10, 0, 0, 0),
-                                  child: Text('Add a description to the note: ' ,
+                                  child: Text('Add additional note to item: '
+                                      '\n(Optional)',
                                     style:GoogleFonts.robotoMono(
                                       textStyle: Theme.of(context).textTheme.headline4,
                                       color: Colors.black,
@@ -354,7 +443,7 @@ class _AddNoteState extends State<AddNote> {
                                     child: AlertDialog(
                                       insetPadding: const EdgeInsets.all(10.0),
                                       backgroundColor: Colors.white,
-                                      title: Text('Add a description to the note',
+                                      title: Text('Add additional note',
                                           style:GoogleFonts.robotoMono(
                                             textStyle: Theme.of(context).textTheme.headline4,
                                             color: Colors.black,
@@ -367,7 +456,7 @@ class _AddNoteState extends State<AddNote> {
                                         mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text('You can view it by pressing the "i" icon on the note.',
+                                          Text('You can view it by pressing the "i" icon on the todo item.',
                                               style:GoogleFonts.robotoMono(
                                                 textStyle: Theme.of(context).textTheme.headline4,
                                                 color: Colors.black,
@@ -406,7 +495,7 @@ class _AddNoteState extends State<AddNote> {
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text('Close',
+                                          child: Text('Done',
                                             style:GoogleFonts.robotoMono(
                                               textStyle: Theme.of(context).textTheme.headline4,
                                               color: Colors.redAccent,
@@ -492,7 +581,61 @@ class _AddNoteState extends State<AddNote> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         ),
                         SizedBox(height: 5.h),
-                      
+                        Row(
+                          children: [
+                            Text('Time:',
+                                style: GoogleFonts.robotoMono(
+                                  textStyle: Theme.of(context).textTheme.headline4,
+                                  color: Colors.black,
+                                  fontSize: 14.h,
+                                  fontWeight: FontWeight.w500,
+                                  fontStyle: FontStyle.normal,
+                                )
+                            ),
+                            Container(
+                              width: 250.h,
+                              padding: const EdgeInsets.all(0),
+                              child: MaterialButton(
+                                padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                                color: Colors.white.withOpacity(0.6),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0.0),
+                                    side: const BorderSide(color: Colors.black,width: 1.0)
+                                ),
+                                highlightElevation: 0,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.fromLTRB( 10, 0, 0, 0),
+                                      child: _selectedTime == null ? Text('Choose Time',
+                                        style:GoogleFonts.robotoMono(
+                                          textStyle: Theme.of(context).textTheme.headline4,
+                                          color: Colors.black,
+                                          fontSize: 15.h,
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle: FontStyle.normal,
+                                        ),
+                                      ) :
+                                      Text(_selectedTime!,
+                                        style:GoogleFonts.robotoMono(
+                                          textStyle: Theme.of(context).textTheme.headline4,
+                                          color: Colors.black,
+                                          fontSize: 15.h,
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle: FontStyle.normal,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                onPressed: () async {
+                                  _selectTime(context);
+                                },
+                              ),
+                            ),                 ],
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ),
+                        SizedBox(height: 20.h),
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(0),
@@ -523,7 +666,7 @@ class _AddNoteState extends State<AddNote> {
                             onPressed: () async {
                               check();
                               if(connected == true){
-                                if(_selectedDate == null || selectedColorValue == null
+                                if(_selectedDate == null || selectedColorValue == null || selectedPriorityValue == null || _selectedTime == null
                                     || titleController.text.trim() == ''){
                                   Fluttertoast.showToast(
                                     msg: 'Fill the required fields',
@@ -536,8 +679,8 @@ class _AddNoteState extends State<AddNote> {
                                 }
                                 else {
                                   debugPrint('pressed');
-                                  storage.setItem('noteCount', (storage.getItem('noteCount')+1));
-                                  debugPrint('${storage.getItem('noteCount')} $_selectedDate '
+                                  storage.setItem('todoItemCount', (storage.getItem('todoItemCount')+1));
+                                  debugPrint('${storage.getItem('todoItemCount')} $_selectedDate '
                                       '$_selectedTime ${titleController.text.trim()} ${selectedColorValue?.toLowerCase()} $selectedPriorityValue');
                                   if(selectedColorValue == 'Green'){colorValue = '0xff4caf50';}
                                   if(selectedColorValue == 'Red'){colorValue = '0xffef9a9a';}
@@ -570,22 +713,25 @@ class _AddNoteState extends State<AddNote> {
                                       ),
                                     );
                                   });
-                                  await userDataCollection.doc('ctse_user_001').get().then((ds) => oldItemContent = ds['notelistitems']);
+                                  await userDataCollection.doc('ctse_user_001').get().then((ds) => oldItemContent = ds['todolistitems']);
                                   itemContent.add({
                                     "date" : _selectedDate,
+                                    "time" : _selectedTime,
                                     "item_name" : titleController.text.trim(),
                                     "card_color" : colorValue,
                                     "card_color_name" : selectedColorValue,
+                                    "priority" : selectedPriorityValue,
+                                    "checked" : false,
                                     "note" : noteController.text.trim()
                                   });
                                   itemContent.addAll(oldItemContent);
                                   debugPrint('added item to the list');
-                                  await userDataCollection.doc('ctse_user_001').update({'notelistitems': itemContent });
+                                  await userDataCollection.doc('ctse_user_001').update({'todolistitems': itemContent });
                                   oldItemContent.clear();
                                   itemContent.clear();
-                                  Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: NotesList()));
+                                  Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: ToDoPage()));
                                   Fluttertoast.showToast(
-                                    msg: 'Note is added.',
+                                    msg: 'To do item added.',
                                     toastLength: Toast.LENGTH_SHORT,
                                     gravity: ToastGravity.TOP_RIGHT,
                                     timeInSecForIosWeb: 2,
